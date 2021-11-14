@@ -2,6 +2,7 @@ package main
 
 import (
 	"go-micro/controller"
+	"go-micro/repository"
 	"log"
 	"net/http"
 	"os"
@@ -12,15 +13,19 @@ import (
 )
 
 func main() {
-	logger := log.New(os.Stdout, "products-api ", log.LstdFlags)
+	logger := log.New(os.Stdout, "go-micro ", log.LstdFlags)
+
+	repository.Initialize()
+	repository.Migrate()
 
 	// create a new serve mux and register the handlers
 	sm := mux.NewRouter()
 
-	cont := controller.ArticlesController{logger}
+	cont := controller.ArticlesController{Logger: logger}
 
-	getR := sm.Methods(http.MethodGet).Subrouter()
-	getR.HandleFunc("/articles", cont.GetArticlesHandler)
+	sm.Methods(http.MethodGet).Subrouter().HandleFunc("/articles", cont.GetArticles)
+	sm.Methods(http.MethodPost).Subrouter().HandleFunc("/articles", cont.PostArticle)
+
 	s := http.Server{
 		Addr:         ":9000",           // configure the bind address
 		Handler:      sm,                // set the default handler

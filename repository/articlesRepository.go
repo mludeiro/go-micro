@@ -1,16 +1,11 @@
 package repository
 
-import (
-	"go-micro/model"
-
-	"gorm.io/gorm"
-)
-
-type ArticlesDto struct {
-	gorm.Model
-	model.Article
+func GetArticles() []Article {
+	articles := []Article{}
+	getDB().Debug().Find(&articles)
+	return articles
 }
 
-func GetArticles() []ArticlesDto {
-	return []ArticlesDto{}
+func AddArticle(a *Article) {
+	getDB().Create(a)
 }

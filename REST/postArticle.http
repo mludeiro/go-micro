@@ -1,0 +1,6 @@
+POST http://localhost:9000/articles
+
+  {
+    "Name": "Articulo copadd",
+    "Price": 65
+  }
