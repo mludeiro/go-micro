@@ -11,6 +11,7 @@ func getRouter() *mux.Router {
 
 	cont := ArticlesController{}
 
+	sm.Methods(http.MethodGet).Subrouter().HandleFunc("/articles/{id:[0-9]+}", cont.GetArticle)
 	sm.Methods(http.MethodGet).Subrouter().HandleFunc("/articles", cont.GetArticles)
 	sm.Methods(http.MethodPost).Subrouter().HandleFunc("/articles", cont.PostArticle)
 

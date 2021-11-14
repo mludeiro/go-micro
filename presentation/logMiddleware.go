@@ -15,7 +15,7 @@ func LogMiddleWare(next http.Handler) http.Handler {
 		next.ServeHTTP(lrw, r)
 
 		tools.GetLogger().Printf(
-			"%6dms %6s %6d %s",
+			"%6dms %6s %4d  %s",
 			time.Since(startTime).Milliseconds(),
 			r.Method,
 			lrw.statusCode,
