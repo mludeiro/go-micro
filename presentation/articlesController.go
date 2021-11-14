@@ -1,14 +1,13 @@
-package controller
+package presentation
 
 import (
 	"encoding/json"
 	"go-micro/repository"
-	"log"
+	"go-micro/tools"
 	"net/http"
 )
 
 type ArticlesController struct {
-	Logger *log.Logger
 }
 
 func (a *ArticlesController) GetArticles(rw http.ResponseWriter, r *http.Request) {
@@ -19,7 +18,7 @@ func (a *ArticlesController) GetArticles(rw http.ResponseWriter, r *http.Request
 		rw.Write(str)
 	} else {
 		rw.WriteHeader(http.StatusInternalServerError)
-		a.Logger.Println(err)
+		tools.GetLogger().Println(err)
 	}
 }
 
@@ -28,7 +27,7 @@ func (a *ArticlesController) PostArticle(rw http.ResponseWriter, r *http.Request
 	err := json.NewDecoder(r.Body).Decode(dto)
 
 	if err != nil {
-		a.Logger.Println(err)
+		tools.GetLogger().Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -42,6 +41,6 @@ func (a *ArticlesController) PostArticle(rw http.ResponseWriter, r *http.Request
 		rw.Write(str)
 	} else {
 		rw.WriteHeader(http.StatusInternalServerError)
-		a.Logger.Println(err)
+		tools.GetLogger().Println(err)
 	}
 }

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"go-micro/tools"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -15,6 +16,15 @@ func Initialize() {
 
 	if err != nil {
 		log.Fatal("Cannot initialize database")
+	}
+
+	sqlDB, err := db.DB()
+
+	if err != nil {
+		sqlDB.SetMaxIdleConns(4)
+		sqlDB.SetMaxOpenConns(20)
+	} else {
+		tools.GetLogger().Println("Cant set pool configuration")
 	}
 
 	db = database
