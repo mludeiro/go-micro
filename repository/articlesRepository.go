@@ -1,10 +1,10 @@
 package repository
 
 func GetArticle(id uint) *Article {
-	articles := []Article{}
-	getDB().Debug().Find(&articles, id)
-	if len(articles) == 1 {
-		return &articles[0]
+	article := Article{}
+	rows := getDB().Debug().Find(&article, id).RowsAffected
+	if rows == 1 {
+		return &article
 	} else {
 		return nil
 	}
@@ -18,4 +18,14 @@ func GetArticles() []Article {
 
 func AddArticle(a *Article) {
 	getDB().Create(a)
+}
+
+func DeleteArticle(id uint) *Article {
+	article := Article{}
+	rows := getDB().Debug().Where("deleted_at is NULL").Delete(&article, id).RowsAffected
+	if rows == 1 {
+		return &article
+	} else {
+		return nil
+	}
 }
