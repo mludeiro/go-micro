@@ -1,8 +1,15 @@
 package repository
 
-func GetArticleType(id uint) *ArticleType {
+func GetArticleType(id uint, fetchs []string) *ArticleType {
 	articleType := ArticleType{}
-	rows := getDB().Find(&articleType, id).RowsAffected
+
+	db := getDB()
+
+	for _, fetch := range fetchs {
+		db = db.Preload(fetch)
+	}
+
+	rows := db.Find(&articleType, id).RowsAffected
 	if rows == 1 {
 		return &articleType
 	} else {
@@ -10,9 +17,16 @@ func GetArticleType(id uint) *ArticleType {
 	}
 }
 
-func GetArticleTypes() []ArticleType {
+func GetArticleTypes(fetchs []string) []ArticleType {
 	articleTypes := []ArticleType{}
-	getDB().Preload("Article").Find(&articleTypes)
+
+	db := getDB()
+
+	for _, fetch := range fetchs {
+		db = db.Preload(fetch)
+	}
+
+	db.Find(&articleTypes)
 	return articleTypes
 }
 

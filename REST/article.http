@@ -1,5 +1,8 @@
 ### GET ONE
 
+GET http://localhost:9000/articles/4
+### GET ONE With details
+
 GET http://localhost:9000/articles/4?expand=ArticleType
 
 ### GET MANY

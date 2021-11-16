@@ -8,7 +8,7 @@ import (
 )
 
 func GetArticleTypesHandler(rw http.ResponseWriter, r *http.Request) {
-	str, err := json.Marshal(repository.GetArticleTypes())
+	str, err := json.Marshal(repository.GetArticleTypes(GetExpand(r)))
 
 	if err == nil {
 		rw.WriteHeader(http.StatusOK)

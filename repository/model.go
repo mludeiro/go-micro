@@ -7,7 +7,7 @@ type Article struct {
 	Name          string
 	Price         int16
 	ArticleTypeID uint
-	ArticleType   ArticleType `json:"-"`
+	ArticleType   *ArticleType `json:",omitempty"`
 }
 
 func (Article) TableName() string {
@@ -17,7 +17,7 @@ func (Article) TableName() string {
 type ArticleType struct {
 	ID      uint `gorm:"primarykey"`
 	Name    string
-	Article []Article `json:"-"`
+	Article []Article `json:",omitempty"`
 }
 
 func (ArticleType) TableName() string {

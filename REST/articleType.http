@@ -1,1 +1,7 @@
+###
+
 GET http://localhost:9000/articleTypes
+
+###
+
+GET http://localhost:9000/articleTypes?expand=Article

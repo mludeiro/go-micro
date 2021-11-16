@@ -17,7 +17,7 @@ func (a *ArticlesController) GetArticle(rw http.ResponseWriter, r *http.Request)
 	if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
 	} else {
-		str, err := json.Marshal(*article)
+		str, err := json.Marshal(article)
 
 		if err == nil {
 			rw.WriteHeader(http.StatusOK)
