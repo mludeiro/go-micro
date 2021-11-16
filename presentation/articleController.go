@@ -11,7 +11,8 @@ type ArticlesController struct {
 }
 
 func (a *ArticlesController) GetArticle(rw http.ResponseWriter, r *http.Request) {
-	article := repository.GetArticle(uint(GetIntParam(r, "id")))
+	id, _ := GetUIntParam(r, "id")
+	article := repository.GetArticle(id, GetExpand(r))
 
 	if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
@@ -30,7 +31,8 @@ func (a *ArticlesController) GetArticle(rw http.ResponseWriter, r *http.Request)
 }
 
 func (a *ArticlesController) DeleteArticle(rw http.ResponseWriter, r *http.Request) {
-	article := repository.DeleteArticle(uint(GetIntParam(r, "id")))
+	id, _ := GetUIntParam(r, "id")
+	article := repository.DeleteArticle(id)
 
 	if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
@@ -49,7 +51,7 @@ func (a *ArticlesController) DeleteArticle(rw http.ResponseWriter, r *http.Reque
 }
 
 func (a *ArticlesController) GetArticles(rw http.ResponseWriter, r *http.Request) {
-	str, err := json.Marshal(repository.GetArticles())
+	str, err := json.Marshal(repository.GetArticles(GetExpand(r)))
 
 	if err == nil {
 		rw.WriteHeader(http.StatusOK)
@@ -66,11 +68,19 @@ func (a *ArticlesController) PostArticle(rw http.ResponseWriter, r *http.Request
 
 	if err != nil {
 		tools.GetLogger().Println(err)
-		rw.WriteHeader(http.StatusInternalServerError)
+		rw.WriteHeader(http.StatusBadRequest)
+		rw.Write([]byte(err.Error()))
 		return
 	}
 
-	repository.AddArticle(dto)
+	err = repository.AddArticle(dto)
+
+	if err != nil {
+		tools.GetLogger().Println(err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		rw.Write([]byte(err.Error()))
+		return
+	}
 
 	str, err := json.Marshal(*dto)
 

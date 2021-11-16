@@ -1,0 +1,22 @@
+### GET ONE
+
+GET http://localhost:9000/articles/4?expand=ArticleType
+
+### GET MANY
+
+GET http://localhost:9000/articles
+extend: ArticleType
+
+### DELETE
+
+DELETE http://localhost:9000/articles/8
+
+### CREATE
+
+POST http://localhost:9000/articles
+
+  {
+    "Name": "Articulo demo",
+    "Price": 65,
+    "ArticleTypeID": 1
+  }
