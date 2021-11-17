@@ -55,17 +55,17 @@ func CreateSampleData() {
 	pants, _ := AddArticleType(&ArticleType{Name: "Pants"})
 	AddArticleType(&ArticleType{Name: "Hats"})
 
-	AddArticle(&Article{Name: "Tennis shoes", ArticleTypeID: shoes.ID})
-	AddArticle(&Article{Name: "Running shoes", ArticleTypeID: shoes.ID})
-	AddArticle(&Article{Name: "Not to run shoes", ArticleTypeID: shoes.ID})
-	AddArticle(&Article{Name: "Jumping shoes", ArticleTypeID: shoes.ID})
-	AddArticle(&Article{Name: "Running but not Jumping shoes", ArticleTypeID: shoes.ID})
-	AddArticle(&Article{Name: "Jeans", ArticleTypeID: pants.ID})
-	AddArticle(&Article{Name: "Oxford Jeans", ArticleTypeID: pants.ID})
-	AddArticle(&Article{Name: "Blue Jeans", ArticleTypeID: pants.ID})
-	AddArticle(&Article{Name: "Orange Jeans", ArticleTypeID: pants.ID})
-	AddArticle(&Article{Name: "All Colors Jeans", ArticleTypeID: pants.ID})
-	AddArticle(&Article{Name: "Cant belive its a jean", ArticleTypeID: pants.ID})
+	AddArticle(&Article{Name: "Tennis shoes", Price: 120, ArticleTypeID: shoes.ID})
+	AddArticle(&Article{Name: "Running shoes", Price: 105, ArticleTypeID: shoes.ID})
+	AddArticle(&Article{Name: "Not to run shoes", Price: 88, ArticleTypeID: shoes.ID})
+	AddArticle(&Article{Name: "Jumping shoes", Price: 95, ArticleTypeID: shoes.ID})
+	AddArticle(&Article{Name: "Running but not Jumping shoes", Price: 67, ArticleTypeID: shoes.ID})
+	AddArticle(&Article{Name: "Jeans", Price: 30, ArticleTypeID: pants.ID})
+	AddArticle(&Article{Name: "Oxford Jeans", Price: 60, ArticleTypeID: pants.ID})
+	AddArticle(&Article{Name: "Blue Jeans", Price: 40, ArticleTypeID: pants.ID})
+	AddArticle(&Article{Name: "Orange Jeans", Price: 40, ArticleTypeID: pants.ID})
+	AddArticle(&Article{Name: "All Colors Jeans", Price: 50, ArticleTypeID: pants.ID})
+	AddArticle(&Article{Name: "Cant belive its a jean", Price: 5, ArticleTypeID: pants.ID})
 
 	// We dont sell hats
 }
