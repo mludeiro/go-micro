@@ -1,9 +1,9 @@
 ### GET ONE
 
-GET http://localhost:9000/articles/4
+GET http://localhost:9000/articles/6
 ### GET ONE With details
 
-GET http://localhost:9000/articles/4?expand=ArticleType
+GET http://localhost:9000/articles/6?expand=ArticleType
 
 ### GET MANY
 

@@ -25,20 +25,18 @@ func GetUIntParam(r *http.Request, param string) (uint, error) {
 	return uint(ival), nil
 }
 
-func GetStringParam(r *http.Request, param string) (string, error) {
-	vars := mux.Vars(r)
+func GetStringQueryParam(r *http.Request, param string) (string, error) {
+	val := r.URL.Query().Get(param)
 
-	val, exist := vars[param]
-
-	if !exist {
+	if len(val) == 0 {
 		return "", errors.New("Parameter not found")
 	}
 
 	return val, nil
 }
 
-func GetArrayStringParam(r *http.Request, param string) ([]string, error) {
-	val, err := GetStringParam(r, param)
+func GetArrayStringQueryParam(r *http.Request, param string) ([]string, error) {
+	val, err := GetStringQueryParam(r, param)
 
 	if err != nil {
 		return []string{}, err
@@ -52,6 +50,6 @@ func GetArrayStringParam(r *http.Request, param string) ([]string, error) {
 }
 
 func GetExpand(r *http.Request) []string {
-	val, _ := GetArrayStringParam(r, "expand")
+	val, _ := GetArrayStringQueryParam(r, "expand")
 	return val
 }
