@@ -73,7 +73,7 @@ func (a *ArticlesController) PostArticle(rw http.ResponseWriter, r *http.Request
 		return
 	}
 
-	err = repository.AddArticle(dto)
+	dto, err = repository.AddArticle(dto)
 
 	if err != nil {
 		tools.GetLogger().Println(err)

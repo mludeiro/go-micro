@@ -1,24 +1,28 @@
 ### GET ONE
 
-GET http://localhost:9000/articles/6
+GET http://localhost:9000/articles/1
 ### GET ONE With details
 
-GET http://localhost:9000/articles/6?expand=ArticleType
+GET http://localhost:9000/articles/2?expand=ArticleType
 
 ### GET MANY
 
 GET http://localhost:9000/articles
 
+### GET MANY with details
+
+GET http://localhost:9000/articles?expand=ArticleType
+
 ### DELETE
 
-DELETE http://localhost:9000/articles/5
+DELETE http://localhost:9000/articles/3
 
 ### CREATE
 
 POST http://localhost:9000/articles
 
   {
-    "Name": "Articulo demo",
+    "Name": "Smoking Pant",
     "Price": 65,
-    "ArticleTypeID": 1
+    "ArticleTypeID": 2
   }

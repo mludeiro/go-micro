@@ -1,5 +1,7 @@
 package repository
 
+import "errors"
+
 func GetArticleType(id uint, fetchs []string) *ArticleType {
 	articleType := ArticleType{}
 
@@ -30,8 +32,11 @@ func GetArticleTypes(fetchs []string) []ArticleType {
 	return articleTypes
 }
 
-func AddArticleType(a *ArticleType) {
-	getDB().Create(a)
+func AddArticleType(at *ArticleType) (*ArticleType, error) {
+	if getDB().Create(at).RowsAffected != 1 {
+		return nil, errors.New("Error creating new article")
+	}
+	return at, nil
 }
 
 func DeleteArticleType(id uint) *ArticleType {

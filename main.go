@@ -9,8 +9,9 @@ import (
 )
 
 func main() {
-	repository.Initialize()
+	repository.Initialize(true)
 	repository.Migrate()
+	repository.CreateSampleData()
 
 	go presentation.CreateServer()
 

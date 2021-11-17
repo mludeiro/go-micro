@@ -21,6 +21,7 @@ func getRouter() *mux.Router {
 	// Sometimes we only need handlers ;-)
 	sm.Methods(http.MethodGet).Path("/articleTypes").HandlerFunc(GetArticleTypesHandler)
 
+	// Just to log the calls, response code and time spent
 	sm.Use(LogMiddleWare)
 
 	return sm

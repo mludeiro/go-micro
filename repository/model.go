@@ -23,7 +23,3 @@ type ArticleType struct {
 func (ArticleType) TableName() string {
 	return "ArticleType"
 }
-
-func Migrate() {
-	getDB().AutoMigrate(&ArticleType{}, &Article{})
-}

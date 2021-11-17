@@ -23,18 +23,18 @@ func GetArticles(fetchs []string) []Article {
 	db := getDB()
 
 	for _, fetch := range fetchs {
-		db.Preload(fetch)
+		db = db.Preload(fetch)
 	}
 
 	db.Find(&articles)
 	return articles
 }
 
-func AddArticle(a *Article) error {
+func AddArticle(a *Article) (*Article, error) {
 	if getDB().Create(a).RowsAffected != 1 {
-		return errors.New("Error creating new article")
+		return nil, errors.New("Error creating new article")
 	}
-	return nil
+	return a, nil
 }
 
 func DeleteArticle(id uint) *Article {
