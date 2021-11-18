@@ -1,17 +1,17 @@
 package main
 
 import (
+	"go-micro/database"
 	"go-micro/presentation"
-	"go-micro/repository"
 	"go-micro/tools"
 	"os"
 	"os/signal"
 )
 
 func main() {
-	repository.Initialize(true)
-	repository.Migrate()
-	repository.CreateSampleData()
+	database.Initialize(true)
+	database.Migrate()
+	database.CreateSampleData()
 
 	go presentation.CreateServer()
 
