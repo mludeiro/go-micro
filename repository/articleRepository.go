@@ -2,11 +2,13 @@ package repository
 
 import (
 	"errors"
+	"go-micro/database"
+	"go-micro/entity"
 )
 
-func GetArticle(id uint, fetchs []string) *Article {
-	article := Article{}
-	db := getDB()
+func GetArticle(id uint, fetchs []string) *entity.Article {
+	article := entity.Article{}
+	db := database.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
@@ -20,9 +22,9 @@ func GetArticle(id uint, fetchs []string) *Article {
 	}
 }
 
-func GetArticles(fetchs []string) []Article {
-	articles := []Article{}
-	db := getDB()
+func GetArticles(fetchs []string) []entity.Article {
+	articles := []entity.Article{}
+	db := database.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
@@ -32,16 +34,16 @@ func GetArticles(fetchs []string) []Article {
 	return articles
 }
 
-func AddArticle(a *Article) (*Article, error) {
-	if getDB().Create(a).RowsAffected != 1 {
+func AddArticle(a *entity.Article) (*entity.Article, error) {
+	if database.GetDB().Create(a).RowsAffected != 1 {
 		return nil, errors.New("Error creating new article")
 	}
 	return a, nil
 }
 
-func DeleteArticle(id uint) *Article {
-	article := Article{}
-	rows := getDB().Where("deleted_at is NULL").Delete(&article, id).RowsAffected
+func DeleteArticle(id uint) *entity.Article {
+	article := entity.Article{}
+	rows := database.GetDB().Where("deleted_at is NULL").Delete(&article, id).RowsAffected
 	if rows == 1 {
 		return &article
 	} else {

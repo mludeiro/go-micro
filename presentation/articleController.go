@@ -2,7 +2,8 @@ package presentation
 
 import (
 	"encoding/json"
-	"go-micro/repository"
+	"go-micro/entity"
+	"go-micro/service"
 	"go-micro/tools"
 	"net/http"
 )
@@ -12,7 +13,7 @@ type ArticlesController struct {
 
 func (a *ArticlesController) GetArticle(rw http.ResponseWriter, r *http.Request) {
 	id, _ := GetUIntParam(r, "id")
-	article := repository.GetArticle(id, GetExpand(r))
+	article := service.GetArticle(id, GetExpand(r))
 
 	if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
@@ -32,7 +33,7 @@ func (a *ArticlesController) GetArticle(rw http.ResponseWriter, r *http.Request)
 
 func (a *ArticlesController) DeleteArticle(rw http.ResponseWriter, r *http.Request) {
 	id, _ := GetUIntParam(r, "id")
-	article := repository.DeleteArticle(id)
+	article := service.DeleteArticle(id)
 
 	if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
@@ -51,7 +52,7 @@ func (a *ArticlesController) DeleteArticle(rw http.ResponseWriter, r *http.Reque
 }
 
 func (a *ArticlesController) GetArticles(rw http.ResponseWriter, r *http.Request) {
-	str, err := json.Marshal(repository.GetArticles(GetExpand(r)))
+	str, err := json.Marshal(service.GetArticles(GetExpand(r)))
 
 	if err == nil {
 		rw.WriteHeader(http.StatusOK)
@@ -63,7 +64,7 @@ func (a *ArticlesController) GetArticles(rw http.ResponseWriter, r *http.Request
 }
 
 func (a *ArticlesController) PostArticle(rw http.ResponseWriter, r *http.Request) {
-	dto := &repository.Article{}
+	dto := &entity.Article{}
 	err := json.NewDecoder(r.Body).Decode(dto)
 
 	if err != nil {
@@ -73,7 +74,7 @@ func (a *ArticlesController) PostArticle(rw http.ResponseWriter, r *http.Request
 		return
 	}
 
-	dto, err = repository.AddArticle(dto)
+	dto, err = service.AddArticle(dto)
 
 	if err != nil {
 		tools.GetLogger().Println(err)
