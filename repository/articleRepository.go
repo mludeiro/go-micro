@@ -1,6 +1,8 @@
 package repository
 
-import "errors"
+import (
+	"errors"
+)
 
 func GetArticle(id uint, fetchs []string) *Article {
 	article := Article{}
