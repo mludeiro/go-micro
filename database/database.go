@@ -25,8 +25,6 @@ var dbLogger = logger.New(
 )
 
 func Initialize(onMemory bool) {
-	dsn := "host=localhost user=postgres password=postgres dbname=go_micro port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-
 	config := &gorm.Config{
 		Logger: dbLogger,
 	}
@@ -37,6 +35,7 @@ func Initialize(onMemory bool) {
 	if onMemory {
 		database, err = gorm.Open(sqlite.Open("file::memory:?cache=shared"), config)
 	} else {
+		dsn := "host=localhost user=postgres password=postgres dbname=go_micro port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 		database, err = gorm.Open(postgres.Open(dsn), config)
 	}
 
