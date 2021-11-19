@@ -48,7 +48,7 @@ func Initialize(onMemory bool) {
 }
 
 func Migrate() {
-	GetDB().AutoMigrate(&entity.ArticleType{}, &entity.Article{})
+	GetDB().AutoMigrate(&entity.ArticleType{}, &entity.Article{}, &entity.Client{}, &entity.Invoice{}, &entity.InvoiceLine{})
 }
 
 func CreateSampleData() {
@@ -58,17 +58,33 @@ func CreateSampleData() {
 
 	GetDB().Create(&shoes).Create(&pants).Create(&hats)
 
-	GetDB().Create(&entity.Article{Name: "Tennis shoes", Price: 120, ArticleTypeID: shoes.ID}).
+	tennis := entity.Article{Name: "Tennis shoes", Price: 120, ArticleTypeID: shoes.ID}
+	jeans := &entity.Article{Name: "Jeans", Price: 30, ArticleTypeID: pants.ID}
+
+	GetDB().Create(&tennis).
 		Create(&entity.Article{Name: "Running shoes", Price: 105, ArticleTypeID: shoes.ID}).
 		Create(&entity.Article{Name: "Not to run shoes", Price: 88, ArticleTypeID: shoes.ID}).
 		Create(&entity.Article{Name: "Jumping shoes", Price: 95, ArticleTypeID: shoes.ID}).
 		Create(&entity.Article{Name: "Running but not Jumping shoes", Price: 67, ArticleTypeID: shoes.ID}).
-		Create(&entity.Article{Name: "Jeans", Price: 30, ArticleTypeID: pants.ID}).
+		Create(&jeans).
 		Create(&entity.Article{Name: "Oxford Jeans", Price: 60, ArticleTypeID: pants.ID}).
 		Create(&entity.Article{Name: "Blue Jeans", Price: 40, ArticleTypeID: pants.ID}).
 		Create(&entity.Article{Name: "Orange Jeans", Price: 40, ArticleTypeID: pants.ID}).
 		Create(&entity.Article{Name: "All Colors Jeans", Price: 50, ArticleTypeID: pants.ID}).
 		Create(&entity.Article{Name: "Cant belive its a jean", Price: 5, ArticleTypeID: pants.ID})
+
+	carlos := entity.Client{Name: "Carlos", Address: "Siempreviva 123"}
+	laura := entity.Client{Name: "Laura", Address: "Siempreviva 321"}
+	pedro := entity.Client{Name: "Pedro", Address: "Calle Falsa 123"}
+
+	GetDB().Create(&carlos).Create(&laura).Create(&pedro)
+
+	invoice := entity.Invoice{ClientID: laura.ID, Amount: 0, Closed: false}
+
+	GetDB().Create(&invoice)
+
+	GetDB().Create(&entity.InvoiceLine{InvoiceID: invoice.ID, ArticleID: tennis.ID, Quantity: 1})
+	GetDB().Create(&entity.InvoiceLine{InvoiceID: invoice.ID, ArticleID: jeans.ID, Quantity: 2})
 
 	// We dont sell hats
 }
