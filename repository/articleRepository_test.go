@@ -10,29 +10,28 @@ import (
 func TestAdd(t *testing.T) {
 	database.Initialize(true)
 	database.Migrate()
-	database.CreateSampleData()
 
 	repo := repository.ArticleRepository{DB: database.GetDB()}
-	article, err := repo.AddArticle(&entity.Article{Name: "Prueba"})
+	article, err := repo.AddArticle(&entity.Article{Name: "test"})
 	if article == nil || err != nil {
-		t.Fatalf("Que paso")
+		t.Fatalf("Null return")
 	}
 	articlesel := repo.GetArticle(article.ID, []string{})
 
 	if articlesel == nil {
-		t.Fatalf("No se creo")
+		t.Fatalf("Not created")
 	}
 
 	articlesel = repo.DeleteArticle(article.ID)
 
 	if articlesel == nil {
-		t.Fatalf("No lo borro")
+		t.Fatalf("Delete not working")
 	}
 	if !articlesel.DeletedAt.Valid {
-		t.Fatalf("No lo borro")
+		t.Fatalf("Not marked as deleted")
 	}
 	articlesel = repo.GetArticle(article.ID, []string{})
 	if articlesel != nil {
-		t.Fatalf("No lo borro")
+		t.Fatalf("Selecting deleted values")
 	}
 }
