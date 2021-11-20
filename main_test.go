@@ -8,3 +8,6 @@ import (
 func TestDemo(t *testing.T) {
 	fmt.Println("Demo")
 }
+func TestFail(t *testing.T) {
+	t.Fatal()
+}
