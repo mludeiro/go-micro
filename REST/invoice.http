@@ -1,0 +1,29 @@
+### GET ONE
+
+GET http://localhost:9000/invoices/1
+### GET ONE With details
+
+GET http://localhost:9000/invoices/1?expand=Client,InvoiceLine,InvoiceLine.Article
+
+### GET MANY
+
+GET http://localhost:9000/invoices
+
+### GET MANY with details
+
+GET http://localhost:9000/invoices?expand=Client
+
+### DELETE
+
+DELETE http://localhost:9000/invoices/1
+
+### CREATE
+
+POST http://localhost:9000/invoices
+
+  {
+    "Name": "Smoking Pant",
+    "Price": 65,
+    "ArticleTypeID": 2
+  }
+

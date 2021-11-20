@@ -1,8 +1,8 @@
 package entity
 
 type ArticleType struct {
-	ID      uint `gorm:"primarykey"`
-	Name    string
+	ID      uint      `gorm:"primarykey"`
+	Name    string    `gorm:"not null"`
 	Article []Article `json:",omitempty"`
 }
 
