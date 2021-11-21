@@ -8,9 +8,13 @@ import (
 	"net/http"
 )
 
-func GetInvoice(rw http.ResponseWriter, r *http.Request) {
+type InvoiceController struct {
+	InvoiceService service.IInvoice
+}
+
+func (this InvoiceController) Get(rw http.ResponseWriter, r *http.Request) {
 	id, _ := GetUIntParam(r, "id")
-	article := service.GetInvoice(id, GetExpand(r))
+	article := this.InvoiceService.Get(id, GetExpand(r))
 
 	if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
@@ -28,8 +32,8 @@ func GetInvoice(rw http.ResponseWriter, r *http.Request) {
 
 }
 
-func GetInvoices(rw http.ResponseWriter, r *http.Request) {
-	str, err := json.Marshal(service.GetInvoices(GetExpand(r)))
+func (this InvoiceController) GetInvoices(rw http.ResponseWriter, r *http.Request) {
+	str, err := json.Marshal(this.InvoiceService.GetAll(GetExpand(r)))
 
 	if err == nil {
 		rw.WriteHeader(http.StatusOK)
@@ -40,7 +44,7 @@ func GetInvoices(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func PostInvoice(rw http.ResponseWriter, r *http.Request) {
+func (this InvoiceController) PostInvoice(rw http.ResponseWriter, r *http.Request) {
 	dto := &entity.Invoice{}
 	err := json.NewDecoder(r.Body).Decode(dto)
 
@@ -51,7 +55,7 @@ func PostInvoice(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	dto, err = service.AddInvoice(dto)
+	dto, err = this.InvoiceService.Add(dto)
 
 	if err != nil {
 		tools.GetLogger().Println(err)

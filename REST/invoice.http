@@ -13,9 +13,8 @@ GET http://localhost:9000/invoices
 
 GET http://localhost:9000/invoices?expand=Client
 
-### DELETE
 
-DELETE http://localhost:9000/invoices/1
+
 
 ### CREATE
 

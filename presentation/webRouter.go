@@ -1,6 +1,9 @@
 package presentation
 
 import (
+	"go-micro/database"
+	"go-micro/repository"
+	"go-micro/service"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -10,7 +13,7 @@ func getRouter() *mux.Router {
 	sm := mux.NewRouter()
 
 	// this is not necessary
-	cont := ArticlesController{}
+	cont := ArticlesController{articleService: service.Article{Repository: &repository.Article{DB: database.GetDB()}}}
 
 	sm.Methods(http.MethodGet).Path("/articles/{id:[0-9]+}").HandlerFunc(cont.GetArticle)
 	sm.Methods(http.MethodGet).Path("/articles").HandlerFunc(cont.GetArticles)
@@ -21,10 +24,11 @@ func getRouter() *mux.Router {
 	// Sometimes we only need handlers ;-)
 	sm.Methods(http.MethodGet).Path("/articleTypes").HandlerFunc(GetArticleTypesHandler)
 
-	sm.Methods(http.MethodGet).Path("/invoices/{id:[0-9]+}").HandlerFunc(GetInvoice)
-	sm.Methods(http.MethodGet).Path("/invoices").HandlerFunc(GetInvoices)
+	invo := InvoiceController{InvoiceService: service.Invoice{Repository: &repository.Invoice{DB: database.GetDB()}}}
+	sm.Methods(http.MethodGet).Path("/invoices/{id:[0-9]+}").HandlerFunc(invo.Get)
+	sm.Methods(http.MethodGet).Path("/invoices").HandlerFunc(invo.GetInvoices)
 
-	sm.Methods(http.MethodPost).Path("/invoices").HandlerFunc(PostInvoice)
+	sm.Methods(http.MethodPost).Path("/invoices").HandlerFunc(invo.PostInvoice)
 
 	// Just to log the calls, response code and time spent
 	sm.Use(LogMiddleWare)

@@ -13,21 +13,21 @@ type IActicle interface {
 }
 
 type Article struct {
-	repo repository.IArticle
+	Repository repository.IArticle
 }
 
 func (this Article) Get(id uint, fetchs []string) *entity.Article {
-	return this.repo.Get(id, fetchs)
+	return this.Repository.Get(id, fetchs)
 }
 
 func (this Article) GetAll(fetchs []string) []entity.Article {
-	return this.repo.GetAll(fetchs)
+	return this.Repository.GetAll(fetchs)
 }
 
 func (this Article) Add(dto *entity.Article) (*entity.Article, error) {
-	return this.repo.Add(dto)
+	return this.Repository.Add(dto)
 }
 
 func (this Article) Delete(id uint) *entity.Article {
-	return this.repo.Delete(id)
+	return this.Repository.Delete(id)
 }

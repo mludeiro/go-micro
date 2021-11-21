@@ -5,8 +5,24 @@ import (
 	"go-micro/repository"
 )
 
-var GetInvoice func(uint, []string) *entity.Invoice = repository.GetInvoice
+type IInvoice interface {
+	Get(uint, []string) *entity.Invoice
+	GetAll([]string) []entity.Invoice
+	Add(*entity.Invoice) (*entity.Invoice, error)
+}
 
-var GetInvoices func([]string) []entity.Invoice = repository.GetInvoices
+type Invoice struct {
+	Repository repository.IInvoice
+}
 
-var AddInvoice func(*entity.Invoice) (*entity.Invoice, error) = repository.AddInvoice
+func (this Invoice) Get(id uint, fetchs []string) *entity.Invoice {
+	return this.Repository.Get(id, fetchs)
+}
+
+func (this Invoice) GetAll(fetchs []string) []entity.Invoice {
+	return this.Repository.GetAll(fetchs)
+}
+
+func (this Invoice) Add(dto *entity.Invoice) (*entity.Invoice, error) {
+	return this.Repository.Add(dto)
+}

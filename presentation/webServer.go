@@ -3,7 +3,6 @@ package presentation
 import (
 	"go-micro/tools"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -24,6 +23,5 @@ func CreateServer() {
 	err := server.ListenAndServe()
 	if err != nil {
 		tools.GetLogger().Printf("Error starting server: %s\n", err)
-		os.Exit(1)
 	}
 }
