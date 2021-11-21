@@ -1,27 +1,33 @@
 package service
 
 import (
-	"go-micro/database"
 	"go-micro/entity"
 	"go-micro/repository"
 )
 
-func GetArticle(id uint, fetchs []string) *entity.Article {
-	return getRepo().Get(id, fetchs)
+type IActicle interface {
+	Get(uint, []string) *entity.Article
+	GetAll([]string) []entity.Article
+	Add(*entity.Article) (*entity.Article, error)
+	Delete(uint) *entity.Article
 }
 
-func GetArticles(fetchs []string) []entity.Article {
-	return getRepo().GetAll(fetchs)
+type Article struct {
+	repo repository.IArticle
 }
 
-func AddArticle(dto *entity.Article) (*entity.Article, error) {
-	return getRepo().Add(dto)
+func (this Article) Get(id uint, fetchs []string) *entity.Article {
+	return this.repo.Get(id, fetchs)
 }
 
-func DeleteArticle(id uint) *entity.Article {
-	return getRepo().Delete(id)
+func (this Article) GetAll(fetchs []string) []entity.Article {
+	return this.repo.GetAll(fetchs)
 }
 
-func getRepo() repository.IArticleRepository {
-	return &repository.ArticleRepository{DB: database.GetDB()}
+func (this Article) Add(dto *entity.Article) (*entity.Article, error) {
+	return this.repo.Add(dto)
+}
+
+func (this Article) Delete(id uint) *entity.Article {
+	return this.repo.Delete(id)
 }

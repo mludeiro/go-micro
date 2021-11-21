@@ -8,10 +8,10 @@ import (
 )
 
 func TestArticleType(t *testing.T) {
-	database.Initialize(true)
+	database.InitializeSqlite()
 	database.Migrate()
 
-	repo := repository.ArticleTypeRepository{DB: database.GetDB()}
+	repo := repository.ArticleType{DB: database.GetDB()}
 	dto, err := repo.Add(&entity.ArticleType{Name: "test"})
 	if dto == nil || err != nil {
 		t.Fatalf("Null return")

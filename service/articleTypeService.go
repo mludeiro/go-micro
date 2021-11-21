@@ -7,6 +7,6 @@ import (
 )
 
 func GetArticleTypes(fetchs []string) []entity.ArticleType {
-	repo := repository.ArticleTypeRepository{DB: database.GetDB()}
+	repo := repository.ArticleType{DB: database.GetDB()}
 	return repo.GetAll(fetchs)
 }

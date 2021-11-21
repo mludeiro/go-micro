@@ -9,11 +9,12 @@ import (
 )
 
 type ArticlesController struct {
+	articleService service.Article
 }
 
-func (a *ArticlesController) GetArticle(rw http.ResponseWriter, r *http.Request) {
+func (this *ArticlesController) GetArticle(rw http.ResponseWriter, r *http.Request) {
 	id, _ := GetUIntParam(r, "id")
-	article := service.GetArticle(id, GetExpand(r))
+	article := this.articleService.Get(id, GetExpand(r))
 
 	if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
@@ -31,9 +32,9 @@ func (a *ArticlesController) GetArticle(rw http.ResponseWriter, r *http.Request)
 
 }
 
-func (a *ArticlesController) DeleteArticle(rw http.ResponseWriter, r *http.Request) {
+func (this *ArticlesController) DeleteArticle(rw http.ResponseWriter, r *http.Request) {
 	id, _ := GetUIntParam(r, "id")
-	article := service.DeleteArticle(id)
+	article := this.articleService.Delete(id)
 
 	if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
@@ -51,8 +52,8 @@ func (a *ArticlesController) DeleteArticle(rw http.ResponseWriter, r *http.Reque
 
 }
 
-func (a *ArticlesController) GetArticles(rw http.ResponseWriter, r *http.Request) {
-	str, err := json.Marshal(service.GetArticles(GetExpand(r)))
+func (this *ArticlesController) GetArticles(rw http.ResponseWriter, r *http.Request) {
+	str, err := json.Marshal(this.articleService.GetAll(GetExpand(r)))
 
 	if err == nil {
 		rw.WriteHeader(http.StatusOK)
@@ -63,7 +64,7 @@ func (a *ArticlesController) GetArticles(rw http.ResponseWriter, r *http.Request
 	}
 }
 
-func (a *ArticlesController) PostArticle(rw http.ResponseWriter, r *http.Request) {
+func (this *ArticlesController) PostArticle(rw http.ResponseWriter, r *http.Request) {
 	dto := &entity.Article{}
 	err := json.NewDecoder(r.Body).Decode(dto)
 
@@ -74,7 +75,7 @@ func (a *ArticlesController) PostArticle(rw http.ResponseWriter, r *http.Request
 		return
 	}
 
-	dto, err = service.AddArticle(dto)
+	dto, err = this.articleService.Add(dto)
 
 	if err != nil {
 		tools.GetLogger().Println(err)

@@ -14,30 +14,32 @@ import (
 
 var db *gorm.DB
 
-var dbLogger = logger.New(
-	tools.GetLogger(), // io writer
-	logger.Config{
-		SlowThreshold:             time.Second, // Slow SQL threshold
-		LogLevel:                  logger.Info, // Log level
-		IgnoreRecordNotFoundError: true,        // Ignore ErrRecordNotFound error for logger
-		Colorful:                  true,        // Disable color
-	},
-)
+var config = &gorm.Config{
+	Logger: logger.New(
+		tools.GetLogger(), // io writer
+		logger.Config{
+			SlowThreshold:             time.Second, // Slow SQL threshold
+			LogLevel:                  logger.Info, // Log level
+			IgnoreRecordNotFoundError: true,        // Ignore ErrRecordNotFound error for logger
+			Colorful:                  true,        // Disable color
+		}),
+}
 
-func Initialize(onMemory bool) {
-	config := &gorm.Config{
-		Logger: dbLogger,
+func InitializePostgress() {
+
+	dsn := "host=localhost user=postgres password=postgres dbname=go_micro port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	database, err := gorm.Open(postgres.Open(dsn), config)
+
+	if err != nil {
+		log.Fatal("Cannot initialize database")
 	}
 
-	var database *gorm.DB
-	var err error
+	db = database
+}
 
-	if onMemory {
-		database, err = gorm.Open(sqlite.Open("file::memory:?cache=shared"), config)
-	} else {
-		dsn := "host=localhost user=postgres password=postgres dbname=go_micro port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-		database, err = gorm.Open(postgres.Open(dsn), config)
-	}
+func InitializeSqlite() {
+
+	database, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), config)
 
 	if err != nil {
 		log.Fatal("Cannot initialize database")

@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	database.Initialize(true)
+	database.InitializeSqlite()
 	database.Migrate()
 	database.CreateSampleData()
 
