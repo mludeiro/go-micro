@@ -2,13 +2,13 @@ package presentation
 
 import (
 	"encoding/json"
-	"go-micro/repository"
+	"go-micro/service"
 	"go-micro/tools"
 	"net/http"
 )
 
 func GetArticleTypesHandler(rw http.ResponseWriter, r *http.Request) {
-	str, err := json.Marshal(repository.GetArticleTypes(GetExpand(r)))
+	str, err := json.Marshal(service.GetArticleTypes(GetExpand(r)))
 
 	if err == nil {
 		rw.WriteHeader(http.StatusOK)

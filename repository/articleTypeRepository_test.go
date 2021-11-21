@@ -7,12 +7,12 @@ import (
 	"testing"
 )
 
-func TestArticle(t *testing.T) {
+func TestArticleType(t *testing.T) {
 	database.Initialize(true)
 	database.Migrate()
 
-	repo := repository.ArticleRepository{DB: database.GetDB()}
-	dto, err := repo.Add(&entity.Article{Name: "test"})
+	repo := repository.ArticleTypeRepository{DB: database.GetDB()}
+	dto, err := repo.Add(&entity.ArticleType{Name: "test"})
 	if dto == nil || err != nil {
 		t.Fatalf("Null return")
 	}
@@ -26,9 +26,6 @@ func TestArticle(t *testing.T) {
 
 	if sel == nil {
 		t.Fatalf("Delete not working")
-	}
-	if !sel.DeletedAt.Valid {
-		t.Fatalf("Not marked as deleted")
 	}
 	sel = repo.Get(dto.ID, []string{})
 	if sel != nil {

@@ -7,19 +7,19 @@ import (
 )
 
 func GetArticle(id uint, fetchs []string) *entity.Article {
-	return getRepo().GetArticle(id, fetchs)
+	return getRepo().Get(id, fetchs)
 }
 
 func GetArticles(fetchs []string) []entity.Article {
-	return getRepo().GetArticles(fetchs)
+	return getRepo().GetAll(fetchs)
 }
 
 func AddArticle(dto *entity.Article) (*entity.Article, error) {
-	return getRepo().AddArticle(dto)
+	return getRepo().Add(dto)
 }
 
 func DeleteArticle(id uint) *entity.Article {
-	return getRepo().DeleteArticle(id)
+	return getRepo().Delete(id)
 }
 
 func getRepo() repository.IArticleRepository {
