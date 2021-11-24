@@ -16,16 +16,16 @@ type Database struct {
 	gormDB *gorm.DB
 }
 
-func (db Database) GetDB() *gorm.DB {
+func (db *Database) GetDB() *gorm.DB {
 	return db.gormDB
 }
 
-func (db Database) Migrate() Database {
+func (db *Database) Migrate() *Database {
 	db.GetDB().AutoMigrate(&entity.ArticleType{}, &entity.Article{}, &entity.Client{}, &entity.Invoice{}, &entity.InvoiceLine{})
 	return db
 }
 
-func (db Database) CreateSampleData() Database {
+func (db *Database) CreateSampleData() *Database {
 	shoes := entity.ArticleType{Name: "Shoes"}
 	pants := entity.ArticleType{Name: "Pants"}
 	hats := entity.ArticleType{Name: "Hats"}
@@ -65,7 +65,7 @@ func (db Database) CreateSampleData() Database {
 	return db
 }
 
-func (db Database) InitializePostgress() Database {
+func (db *Database) InitializePostgress() *Database {
 	dsn := "host=localhost user=postgres password=postgres dbname=go_micro port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	DB, err := gorm.Open(postgres.Open(dsn), createGormConfig())
 
@@ -77,7 +77,7 @@ func (db Database) InitializePostgress() Database {
 	return db
 }
 
-func (db Database) InitializeSqlite() Database {
+func (db *Database) InitializeSqlite() *Database {
 
 	DB, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), createGormConfig())
 

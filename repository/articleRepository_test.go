@@ -8,7 +8,7 @@ import (
 )
 
 func TestArticle(t *testing.T) {
-	database := database.Database{}.InitializeSqlite().Migrate()
+	database := (&database.Database{}).InitializeSqlite().Migrate()
 
 	repo := repository.Article{DataBase: database}
 	dto, err := repo.Add(&entity.Article{Name: "test"})

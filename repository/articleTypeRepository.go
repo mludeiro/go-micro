@@ -14,7 +14,7 @@ type IArticleType interface {
 }
 
 type ArticleType struct {
-	DataBase database.Database
+	DataBase *database.Database
 }
 
 func (this ArticleType) Get(id uint, fetchs []string) *entity.ArticleType {

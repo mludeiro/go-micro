@@ -1,4 +1,4 @@
-package main
+package container
 
 import (
 	"go-micro/database"
@@ -8,34 +8,34 @@ import (
 )
 
 type Container struct {
-	WebServer presentation.WebServer
-	DataBase  database.Database
+	WebServer *presentation.WebServer
+	DataBase  *database.Database
 }
 
 func NewContainer() Container {
 	database := database.Database{}
 
 	return Container{
-		DataBase: database,
+		DataBase: &database,
 
-		WebServer: presentation.WebServer{
+		WebServer: &presentation.WebServer{
 			Router: presentation.WebRouter{
 				ArticleController: &presentation.ArticleController{
 					Service: service.Article{
 						Repository: &repository.Article{
-							DataBase: database},
+							DataBase: &database},
 					},
 				},
 				ArticleTypeController: &presentation.ArticleTypeController{
 					Service: &service.ArticleType{
 						Repository: &repository.ArticleType{
-							DataBase: database},
+							DataBase: &database},
 					},
 				},
 				InvoiceController: &presentation.InvoiceController{
 					InvoiceService: &service.Invoice{
 						Repository: &repository.Invoice{
-							DataBase: database},
+							DataBase: &database},
 					},
 				},
 			},

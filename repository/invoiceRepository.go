@@ -13,7 +13,7 @@ type IInvoice interface {
 }
 
 type Invoice struct {
-	DataBase database.Database
+	DataBase *database.Database
 }
 
 func (this *Invoice) Get(id uint, fetchs []string) *entity.Invoice {

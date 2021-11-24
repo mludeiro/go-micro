@@ -8,7 +8,7 @@ import (
 )
 
 func TestInvoice(t *testing.T) {
-	database := database.Database{}.InitializeSqlite().Migrate()
+	database := (&database.Database{}).InitializeSqlite().Migrate()
 
 	repo := repository.Invoice{DataBase: database}
 	dto, err := repo.Add(&entity.Invoice{})

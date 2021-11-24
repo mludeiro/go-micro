@@ -1,16 +1,17 @@
 package main
 
 import (
+	"go-micro/container"
 	"go-micro/tools"
 	"os"
 	"os/signal"
 )
 
 func main() {
-	cont := NewContainer()
+	cont := container.NewContainer()
 
-	cont.DataBase.InitializeSqlite().CreateSampleData()
-	// 	cont.DataBase.InitializePostgress().CreateSampleData()
+	cont.DataBase.InitializeSqlite().Migrate().CreateSampleData()
+	// 	cont.DataBase.InitializePostgress().Migrate().CreateSampleData()
 
 	go cont.WebServer.CreateServer()
 
