@@ -4,8 +4,6 @@ import (
 	"errors"
 	"go-micro/database"
 	"go-micro/entity"
-
-	"gorm.io/gorm"
 )
 
 type IArticleType interface {
@@ -16,13 +14,13 @@ type IArticleType interface {
 }
 
 type ArticleType struct {
-	DB *gorm.DB
+	DataBase database.Database
 }
 
 func (this ArticleType) Get(id uint, fetchs []string) *entity.ArticleType {
 	articleType := entity.ArticleType{}
 
-	db := database.GetDB()
+	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
@@ -39,7 +37,7 @@ func (this ArticleType) Get(id uint, fetchs []string) *entity.ArticleType {
 func (this ArticleType) GetAll(fetchs []string) []entity.ArticleType {
 	articleTypes := []entity.ArticleType{}
 
-	db := database.GetDB()
+	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
@@ -50,7 +48,7 @@ func (this ArticleType) GetAll(fetchs []string) []entity.ArticleType {
 }
 
 func (this ArticleType) Add(at *entity.ArticleType) (*entity.ArticleType, error) {
-	if database.GetDB().Create(at).RowsAffected != 1 {
+	if this.DataBase.GetDB().Create(at).RowsAffected != 1 {
 		return nil, errors.New("Error creating new article")
 	}
 	return at, nil
@@ -58,7 +56,7 @@ func (this ArticleType) Add(at *entity.ArticleType) (*entity.ArticleType, error)
 
 func (this ArticleType) Delete(id uint) *entity.ArticleType {
 	articleType := entity.ArticleType{}
-	rows := database.GetDB().Delete(&articleType, id).RowsAffected
+	rows := this.DataBase.GetDB().Delete(&articleType, id).RowsAffected
 	if rows == 1 {
 		return &articleType
 	} else {

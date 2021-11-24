@@ -8,13 +8,13 @@ import (
 	"net/http"
 )
 
-type ArticlesController struct {
-	articleService service.Article
+type ArticleController struct {
+	Service service.Article
 }
 
-func (this *ArticlesController) GetArticle(rw http.ResponseWriter, r *http.Request) {
+func (this *ArticleController) GetArticle(rw http.ResponseWriter, r *http.Request) {
 	id, _ := GetUIntParam(r, "id")
-	article := this.articleService.Get(id, GetExpand(r))
+	article := this.Service.Get(id, GetExpand(r))
 
 	if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
@@ -32,9 +32,9 @@ func (this *ArticlesController) GetArticle(rw http.ResponseWriter, r *http.Reque
 
 }
 
-func (this *ArticlesController) DeleteArticle(rw http.ResponseWriter, r *http.Request) {
+func (this *ArticleController) DeleteArticle(rw http.ResponseWriter, r *http.Request) {
 	id, _ := GetUIntParam(r, "id")
-	article := this.articleService.Delete(id)
+	article := this.Service.Delete(id)
 
 	if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
@@ -52,8 +52,8 @@ func (this *ArticlesController) DeleteArticle(rw http.ResponseWriter, r *http.Re
 
 }
 
-func (this *ArticlesController) GetArticles(rw http.ResponseWriter, r *http.Request) {
-	str, err := json.Marshal(this.articleService.GetAll(GetExpand(r)))
+func (this *ArticleController) GetArticles(rw http.ResponseWriter, r *http.Request) {
+	str, err := json.Marshal(this.Service.GetAll(GetExpand(r)))
 
 	if err == nil {
 		rw.WriteHeader(http.StatusOK)
@@ -64,7 +64,7 @@ func (this *ArticlesController) GetArticles(rw http.ResponseWriter, r *http.Requ
 	}
 }
 
-func (this *ArticlesController) PostArticle(rw http.ResponseWriter, r *http.Request) {
+func (this *ArticleController) PostArticle(rw http.ResponseWriter, r *http.Request) {
 	dto := &entity.Article{}
 	err := json.NewDecoder(r.Body).Decode(dto)
 
@@ -75,7 +75,7 @@ func (this *ArticlesController) PostArticle(rw http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	dto, err = this.articleService.Add(dto)
+	dto, err = this.Service.Add(dto)
 
 	if err != nil {
 		tools.GetLogger().Println(err)

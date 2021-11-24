@@ -2,9 +2,8 @@ package repository
 
 import (
 	"errors"
+	"go-micro/database"
 	"go-micro/entity"
-
-	"gorm.io/gorm"
 )
 
 type IArticle interface {
@@ -15,12 +14,12 @@ type IArticle interface {
 }
 
 type Article struct {
-	DB *gorm.DB
+	DataBase database.Database
 }
 
 func (this *Article) Get(id uint, fetchs []string) *entity.Article {
 	article := entity.Article{}
-	db := this.DB
+	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
@@ -36,7 +35,7 @@ func (this *Article) Get(id uint, fetchs []string) *entity.Article {
 
 func (this *Article) GetAll(fetchs []string) []entity.Article {
 	articles := []entity.Article{}
-	db := this.DB
+	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
@@ -47,7 +46,7 @@ func (this *Article) GetAll(fetchs []string) []entity.Article {
 }
 
 func (this *Article) Add(a *entity.Article) (*entity.Article, error) {
-	if this.DB.Create(a).RowsAffected != 1 {
+	if this.DataBase.GetDB().Create(a).RowsAffected != 1 {
 		return nil, errors.New("Error creating new article")
 	}
 	return a, nil
@@ -55,7 +54,7 @@ func (this *Article) Add(a *entity.Article) (*entity.Article, error) {
 
 func (this *Article) Delete(id uint) *entity.Article {
 	article := entity.Article{}
-	rows := this.DB.Where("deleted_at is NULL").Delete(&article, id).RowsAffected
+	rows := this.DataBase.GetDB().Where("deleted_at is NULL").Delete(&article, id).RowsAffected
 	if rows == 1 {
 		return &article
 	} else {

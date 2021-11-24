@@ -8,10 +8,9 @@ import (
 )
 
 func TestArticle(t *testing.T) {
-	database.InitializeSqlite()
-	database.Migrate()
+	database := database.Database{}.InitializeSqlite().Migrate()
 
-	repo := repository.Article{DB: database.GetDB()}
+	repo := repository.Article{DataBase: database}
 	dto, err := repo.Add(&entity.Article{Name: "test"})
 	if dto == nil || err != nil {
 		t.Fatalf("Null return")

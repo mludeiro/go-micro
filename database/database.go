@@ -12,57 +12,30 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var db *gorm.DB
-
-var config = &gorm.Config{
-	Logger: logger.New(
-		tools.GetLogger(), // io writer
-		logger.Config{
-			SlowThreshold:             time.Second, // Slow SQL threshold
-			LogLevel:                  logger.Info, // Log level
-			IgnoreRecordNotFoundError: true,        // Ignore ErrRecordNotFound error for logger
-			Colorful:                  true,        // Disable color
-		}),
+type Database struct {
+	gormDB *gorm.DB
 }
 
-func InitializePostgress() {
-
-	dsn := "host=localhost user=postgres password=postgres dbname=go_micro port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	database, err := gorm.Open(postgres.Open(dsn), config)
-
-	if err != nil {
-		log.Fatal("Cannot initialize database")
-	}
-
-	db = database
+func (db Database) GetDB() *gorm.DB {
+	return db.gormDB
 }
 
-func InitializeSqlite() {
-
-	database, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), config)
-
-	if err != nil {
-		log.Fatal("Cannot initialize database")
-	}
-
-	db = database
+func (db Database) Migrate() Database {
+	db.GetDB().AutoMigrate(&entity.ArticleType{}, &entity.Article{}, &entity.Client{}, &entity.Invoice{}, &entity.InvoiceLine{})
+	return db
 }
 
-func Migrate() {
-	GetDB().AutoMigrate(&entity.ArticleType{}, &entity.Article{}, &entity.Client{}, &entity.Invoice{}, &entity.InvoiceLine{})
-}
-
-func CreateSampleData() {
+func (db Database) CreateSampleData() Database {
 	shoes := entity.ArticleType{Name: "Shoes"}
 	pants := entity.ArticleType{Name: "Pants"}
 	hats := entity.ArticleType{Name: "Hats"}
 
-	GetDB().Create(&shoes).Create(&pants).Create(&hats)
+	db.GetDB().Create(&shoes).Create(&pants).Create(&hats)
 
 	tennis := entity.Article{Name: "Tennis shoes", Price: 120, ArticleTypeID: shoes.ID}
 	jeans := &entity.Article{Name: "Jeans", Price: 30, ArticleTypeID: pants.ID}
 
-	GetDB().Create(&tennis).
+	db.GetDB().Create(&tennis).
 		Create(&entity.Article{Name: "Running shoes", Price: 105, ArticleTypeID: shoes.ID}).
 		Create(&entity.Article{Name: "Not to run shoes", Price: 88, ArticleTypeID: shoes.ID}).
 		Create(&entity.Article{Name: "Jumping shoes", Price: 95, ArticleTypeID: shoes.ID}).
@@ -78,18 +51,53 @@ func CreateSampleData() {
 	laura := entity.Client{Name: "Laura", Address: "Siempreviva 321"}
 	pedro := entity.Client{Name: "Pedro", Address: "Calle Falsa 123"}
 
-	GetDB().Create(&carlos).Create(&laura).Create(&pedro)
+	db.GetDB().Create(&carlos).Create(&laura).Create(&pedro)
 
 	invoice := entity.Invoice{ClientID: laura.ID, Amount: 0, Closed: false}
 
-	GetDB().Create(&invoice)
+	db.GetDB().Create(&invoice)
 
-	GetDB().Create(&entity.InvoiceLine{InvoiceID: invoice.ID, ArticleID: tennis.ID, Quantity: 1})
-	GetDB().Create(&entity.InvoiceLine{InvoiceID: invoice.ID, ArticleID: jeans.ID, Quantity: 2})
+	db.GetDB().Create(&entity.InvoiceLine{InvoiceID: invoice.ID, ArticleID: tennis.ID, Quantity: 1})
+	db.GetDB().Create(&entity.InvoiceLine{InvoiceID: invoice.ID, ArticleID: jeans.ID, Quantity: 2})
 
 	// We dont sell hats
+
+	return db
 }
 
-func GetDB() *gorm.DB {
+func (db Database) InitializePostgress() Database {
+	dsn := "host=localhost user=postgres password=postgres dbname=go_micro port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	DB, err := gorm.Open(postgres.Open(dsn), createGormConfig())
+
+	if err != nil {
+		log.Fatal("Cannot initialize database")
+	}
+
+	db.gormDB = DB
 	return db
+}
+
+func (db Database) InitializeSqlite() Database {
+
+	DB, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), createGormConfig())
+
+	if err != nil {
+		log.Fatal("Cannot initialize database")
+	}
+
+	db.gormDB = DB
+	return db
+}
+
+func createGormConfig() *gorm.Config {
+	return &gorm.Config{
+		Logger: logger.New(
+			tools.GetLogger(), // io writer
+			logger.Config{
+				SlowThreshold:             time.Second, // Slow SQL threshold
+				LogLevel:                  logger.Info, // Log level
+				IgnoreRecordNotFoundError: true,        // Ignore ErrRecordNotFound error for logger
+				Colorful:                  true,        // Disable color
+			}),
+	}
 }

@@ -2,9 +2,8 @@ package repository
 
 import (
 	"errors"
+	"go-micro/database"
 	"go-micro/entity"
-
-	"gorm.io/gorm"
 )
 
 type IInvoice interface {
@@ -14,12 +13,12 @@ type IInvoice interface {
 }
 
 type Invoice struct {
-	DB *gorm.DB
+	DataBase database.Database
 }
 
 func (this *Invoice) Get(id uint, fetchs []string) *entity.Invoice {
 	dto := entity.Invoice{}
-	db := this.DB
+	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
@@ -35,7 +34,7 @@ func (this *Invoice) Get(id uint, fetchs []string) *entity.Invoice {
 
 func (this *Invoice) GetAll(fetchs []string) []entity.Invoice {
 	dtos := []entity.Invoice{}
-	db := this.DB
+	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
@@ -46,7 +45,7 @@ func (this *Invoice) GetAll(fetchs []string) []entity.Invoice {
 }
 
 func (this *Invoice) Add(a *entity.Invoice) (*entity.Invoice, error) {
-	if this.DB.Create(a).RowsAffected != 1 {
+	if this.DataBase.GetDB().Create(a).RowsAffected != 1 {
 		return nil, errors.New("Error creating new Invoice")
 	}
 	return a, nil

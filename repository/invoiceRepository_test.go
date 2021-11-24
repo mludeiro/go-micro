@@ -8,10 +8,9 @@ import (
 )
 
 func TestInvoice(t *testing.T) {
-	database.InitializeSqlite()
-	database.Migrate()
+	database := database.Database{}.InitializeSqlite().Migrate()
 
-	repo := repository.Invoice{DB: database.GetDB()}
+	repo := repository.Invoice{DataBase: database}
 	dto, err := repo.Add(&entity.Invoice{})
 	if dto == nil || err != nil {
 		t.Fatalf("Null return")
