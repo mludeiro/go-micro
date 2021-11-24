@@ -11,7 +11,7 @@ type Article struct {
 	CreatedAt     time.Time      ``
 	UpdatedAt     time.Time      ``
 	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`
-	Name          string         `gorm:"not null"`
+	Name          string         `gorm:"not null;default:null"`
 	Price         int16          ``
 	ArticleTypeID uint           ``
 	ArticleType   *ArticleType   `json:",omitempty"`

@@ -39,3 +39,15 @@ func TestArticle(t *testing.T) {
 	}
 
 }
+func TestInsertWrongArticle(t *testing.T) {
+	database := (&database.Database{}).InitializeSqlite().Migrate()
+
+	repo := repository.Article{DataBase: database}
+	dto, err := repo.Add(&entity.Article{})
+	if dto != nil {
+		t.Fatalf("Not Null return")
+	}
+	if err == nil {
+		t.Fatalf("Nil err")
+	}
+}
