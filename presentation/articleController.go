@@ -9,7 +9,7 @@ import (
 )
 
 type ArticleController struct {
-	Service service.Article
+	Service service.IActicle
 }
 
 func (this *ArticleController) GetArticle(rw http.ResponseWriter, r *http.Request) {

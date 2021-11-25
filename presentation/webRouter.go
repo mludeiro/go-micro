@@ -8,9 +8,9 @@ import (
 
 type WebRouter struct {
 	router                *mux.Router
-	ArticleController     *ArticleController
-	ArticleTypeController *ArticleTypeController
-	InvoiceController     *InvoiceController
+	ArticleController     ArticleController
+	ArticleTypeController ArticleTypeController
+	InvoiceController     InvoiceController
 }
 
 func (this *WebRouter) getRouter() *mux.Router {

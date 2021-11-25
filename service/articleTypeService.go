@@ -6,7 +6,7 @@ import (
 )
 
 type ArticleType struct {
-	Repository *repository.ArticleType
+	Repository repository.IArticleType
 }
 
 func (this *ArticleType) GetArticleTypes(fetchs []string) []entity.ArticleType {

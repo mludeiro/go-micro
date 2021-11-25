@@ -8,7 +8,7 @@ import (
 )
 
 type ArticleTypeController struct {
-	Service *service.ArticleType
+	Service service.ArticleType
 }
 
 func (this *ArticleTypeController) GetAll(rw http.ResponseWriter, r *http.Request) {

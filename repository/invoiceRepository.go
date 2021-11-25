@@ -16,7 +16,7 @@ type Invoice struct {
 	DataBase *database.Database
 }
 
-func (this *Invoice) Get(id uint, fetchs []string) *entity.Invoice {
+func (this Invoice) Get(id uint, fetchs []string) *entity.Invoice {
 	dto := entity.Invoice{}
 	db := this.DataBase.GetDB()
 
@@ -32,7 +32,7 @@ func (this *Invoice) Get(id uint, fetchs []string) *entity.Invoice {
 	}
 }
 
-func (this *Invoice) GetAll(fetchs []string) []entity.Invoice {
+func (this Invoice) GetAll(fetchs []string) []entity.Invoice {
 	dtos := []entity.Invoice{}
 	db := this.DataBase.GetDB()
 
@@ -44,7 +44,7 @@ func (this *Invoice) GetAll(fetchs []string) []entity.Invoice {
 	return dtos
 }
 
-func (this *Invoice) Add(a *entity.Invoice) (*entity.Invoice, error) {
+func (this Invoice) Add(a *entity.Invoice) (*entity.Invoice, error) {
 	if this.DataBase.GetDB().Create(a).RowsAffected != 1 {
 		return nil, errors.New("Error creating new Invoice")
 	}

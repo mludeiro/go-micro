@@ -17,7 +17,7 @@ type Article struct {
 	DataBase *database.Database
 }
 
-func (this *Article) Get(id uint, fetchs []string) *entity.Article {
+func (this Article) Get(id uint, fetchs []string) *entity.Article {
 	article := entity.Article{}
 	db := this.DataBase.GetDB()
 
@@ -33,7 +33,7 @@ func (this *Article) Get(id uint, fetchs []string) *entity.Article {
 	}
 }
 
-func (this *Article) GetAll(fetchs []string) []entity.Article {
+func (this Article) GetAll(fetchs []string) []entity.Article {
 	articles := []entity.Article{}
 	db := this.DataBase.GetDB()
 
@@ -45,14 +45,14 @@ func (this *Article) GetAll(fetchs []string) []entity.Article {
 	return articles
 }
 
-func (this *Article) Add(a *entity.Article) (*entity.Article, error) {
+func (this Article) Add(a *entity.Article) (*entity.Article, error) {
 	if this.DataBase.GetDB().Create(a).RowsAffected != 1 {
 		return nil, errors.New("Error creating new article")
 	}
 	return a, nil
 }
 
-func (this *Article) Delete(id uint) *entity.Article {
+func (this Article) Delete(id uint) *entity.Article {
 	article := entity.Article{}
 	rows := this.DataBase.GetDB().Where("deleted_at is NULL").Delete(&article, id).RowsAffected
 	if rows == 1 {

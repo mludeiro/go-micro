@@ -8,7 +8,7 @@ import (
 )
 
 type Container struct {
-	WebServer *presentation.WebServer
+	WebServer presentation.WebServer
 	DataBase  *database.Database
 }
 
@@ -18,23 +18,23 @@ func NewContainer() Container {
 	return Container{
 		DataBase: &database,
 
-		WebServer: &presentation.WebServer{
+		WebServer: presentation.WebServer{
 			Router: presentation.WebRouter{
-				ArticleController: &presentation.ArticleController{
+				ArticleController: presentation.ArticleController{
 					Service: service.Article{
-						Repository: &repository.Article{
+						Repository: repository.Article{
 							DataBase: &database},
 					},
 				},
-				ArticleTypeController: &presentation.ArticleTypeController{
-					Service: &service.ArticleType{
-						Repository: &repository.ArticleType{
+				ArticleTypeController: presentation.ArticleTypeController{
+					Service: service.ArticleType{
+						Repository: repository.ArticleType{
 							DataBase: &database},
 					},
 				},
-				InvoiceController: &presentation.InvoiceController{
-					InvoiceService: &service.Invoice{
-						Repository: &repository.Invoice{
+				InvoiceController: presentation.InvoiceController{
+					InvoiceService: service.Invoice{
+						Repository: repository.Invoice{
 							DataBase: &database},
 					},
 				},
