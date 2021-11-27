@@ -14,7 +14,7 @@ type WebServer struct {
 func (this *WebServer) CreateServer() {
 	this.server = http.Server{
 		Addr:         ":9000",                 // configure the bind address
-		Handler:      this.Router.getRouter(), // set the default handler
+		Handler:      this.Router.GetRouter(), // set the default handler
 		ErrorLog:     tools.GetLogger(),       // set the logger for the server
 		ReadTimeout:  5 * time.Second,         // max time to read request from the client
 		WriteTimeout: 10 * time.Second,        // max time to write response to the client

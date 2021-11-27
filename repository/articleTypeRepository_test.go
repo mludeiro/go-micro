@@ -4,10 +4,14 @@ import (
 	"go-micro/database"
 	"go-micro/entity"
 	"go-micro/repository"
+	"go-micro/tools"
+	"io"
 	"testing"
 )
 
 func TestArticleType(t *testing.T) {
+	tools.GetLogger().SetOutput(io.Discard)
+
 	database := (&database.Database{}).InitializeSqlite().Migrate()
 
 	repo := repository.ArticleType{DataBase: database}

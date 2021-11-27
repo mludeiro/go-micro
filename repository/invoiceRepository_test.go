@@ -4,10 +4,13 @@ import (
 	"go-micro/database"
 	"go-micro/entity"
 	"go-micro/repository"
+	"go-micro/tools"
+	"io/ioutil"
 	"testing"
 )
 
 func TestInvoice(t *testing.T) {
+	tools.GetLogger().SetOutput(ioutil.Discard)
 	database := (&database.Database{}).InitializeSqlite().Migrate()
 
 	repo := repository.Invoice{DataBase: database}

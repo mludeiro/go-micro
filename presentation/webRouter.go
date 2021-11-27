@@ -13,7 +13,11 @@ type WebRouter struct {
 	InvoiceController     InvoiceController
 }
 
-func (this *WebRouter) getRouter() *mux.Router {
+func (this *WebRouter) GetRouter() *mux.Router {
+	if this.router != nil {
+		return this.router
+	}
+
 	sm := mux.NewRouter()
 
 	// this is not necessary
@@ -34,5 +38,6 @@ func (this *WebRouter) getRouter() *mux.Router {
 	// Just to log the calls, response code and time spent
 	sm.Use(LogMiddleWare)
 
-	return sm
+	this.router = sm
+	return this.router
 }
