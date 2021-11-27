@@ -13,9 +13,9 @@ func TestIntegration(t *testing.T) {
 	cont := container.NewContainer()
 	tools.GetLogger().SetOutput(io.Discard)
 
-	cont.DataBase.InitializeSqlite().Migrate()
+	cont.DataBase.InitializeSqlite().Migrate().CreateSampleData()
 
-	urls := []string{"/articles", "/articleTypes", "/invoices"}
+	urls := []string{"/articles", "/articles/1", "/articleTypes", "/invoices", "/invoices/1"}
 
 	for _, url := range urls {
 		w := httptest.NewRecorder()
