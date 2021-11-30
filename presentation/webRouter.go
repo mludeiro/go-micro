@@ -20,7 +20,6 @@ func (this *WebRouter) GetRouter() *mux.Router {
 
 	sm := mux.NewRouter()
 
-	// this is not necessary
 	sm.Methods(http.MethodGet).Path("/articles/{id:[0-9]+}").HandlerFunc(this.ArticleController.GetArticle)
 	sm.Methods(http.MethodGet).Path("/articles").HandlerFunc(this.ArticleController.GetArticles)
 
