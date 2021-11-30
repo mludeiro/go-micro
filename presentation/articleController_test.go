@@ -15,20 +15,20 @@ type ServiceActicleMock struct {
 	ArticleArray []entity.Article
 }
 
-func (this ServiceActicleMock) Get(uint, []string) *entity.Article {
-	return this.Article
+func (this ServiceActicleMock) Get(uint, []string) (*entity.Article, error) {
+	return this.Article, this.Error
 }
 
-func (this ServiceActicleMock) GetAll([]string) []entity.Article {
-	return this.ArticleArray
+func (this ServiceActicleMock) GetAll([]string) ([]entity.Article, error) {
+	return this.ArticleArray, this.Error
 }
 
 func (this ServiceActicleMock) Add(*entity.Article) (*entity.Article, error) {
 	return this.Article, this.Error
 }
 
-func (this ServiceActicleMock) Delete(uint) *entity.Article {
-	return this.Article
+func (this ServiceActicleMock) Delete(uint) (*entity.Article, error) {
+	return this.Article, this.Error
 }
 
 func TestGet(t *testing.T) {

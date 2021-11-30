@@ -18,13 +18,13 @@ func TestArticle(t *testing.T) {
 	if dto == nil || err != nil {
 		t.Fatalf("Null return")
 	}
-	sel := repo.Get(dto.ID, []string{})
+	sel, _ := repo.Get(dto.ID, []string{})
 
 	if sel == nil {
 		t.Fatalf("Not created")
 	}
 
-	sel = repo.Delete(dto.ID)
+	sel, _ = repo.Delete(dto.ID)
 
 	if sel == nil {
 		t.Fatalf("Delete not working")
@@ -32,12 +32,13 @@ func TestArticle(t *testing.T) {
 	if !sel.DeletedAt.Valid {
 		t.Fatalf("Not marked as deleted")
 	}
-	sel = repo.Get(dto.ID, []string{})
+	sel, _ = repo.Get(dto.ID, []string{})
 	if sel != nil {
 		t.Fatalf("Selecting deleted values")
 	}
 
-	if len(repo.GetAll([]string{})) != 0 {
+	lista, _ := repo.GetAll([]string{})
+	if len(lista) != 0 {
 		t.Fatalf("Too many values")
 	}
 

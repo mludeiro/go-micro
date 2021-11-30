@@ -14,9 +14,11 @@ type ArticleController struct {
 
 func (this *ArticleController) GetArticle(rw http.ResponseWriter, r *http.Request) {
 	id, _ := GetUIntParam(r, "id")
-	article := this.Service.Get(id, GetExpand(r))
+	article, err := this.Service.Get(id, GetExpand(r))
 
-	if article == nil {
+	if err != nil {
+		rw.WriteHeader(http.StatusInternalServerError)
+	} else if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
 	} else {
 		str, err := json.Marshal(article)
@@ -34,9 +36,11 @@ func (this *ArticleController) GetArticle(rw http.ResponseWriter, r *http.Reques
 
 func (this *ArticleController) DeleteArticle(rw http.ResponseWriter, r *http.Request) {
 	id, _ := GetUIntParam(r, "id")
-	article := this.Service.Delete(id)
+	article, err := this.Service.Delete(id)
 
-	if article == nil {
+	if err != nil {
+		rw.WriteHeader(http.StatusInternalServerError)
+	} else if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
 	} else {
 		str, err := json.Marshal(*article)
@@ -53,14 +57,20 @@ func (this *ArticleController) DeleteArticle(rw http.ResponseWriter, r *http.Req
 }
 
 func (this *ArticleController) GetArticles(rw http.ResponseWriter, r *http.Request) {
-	str, err := json.Marshal(this.Service.GetAll(GetExpand(r)))
+	lst, err := this.Service.GetAll(GetExpand(r))
 
-	if err == nil {
-		rw.WriteHeader(http.StatusOK)
-		rw.Write(str)
-	} else {
+	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
-		tools.GetLogger().Println(err)
+	} else {
+		str, err := json.Marshal(lst)
+
+		if err == nil {
+			rw.WriteHeader(http.StatusOK)
+			rw.Write(str)
+		} else {
+			rw.WriteHeader(http.StatusInternalServerError)
+			tools.GetLogger().Println(err)
+		}
 	}
 }
 
