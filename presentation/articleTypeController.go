@@ -12,13 +12,18 @@ type ArticleTypeController struct {
 }
 
 func (this *ArticleTypeController) GetAll(rw http.ResponseWriter, r *http.Request) {
-	str, err := json.Marshal(this.Service.GetAll(GetExpand(r)))
-
-	if err == nil {
-		rw.WriteHeader(http.StatusOK)
-		rw.Write(str)
-	} else {
+	data, err := this.Service.GetAll(GetExpand(r))
+	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
-		tools.GetLogger().Println(err)
+	} else {
+		str, err := json.Marshal(data)
+		if err == nil {
+			rw.WriteHeader(http.StatusOK)
+			rw.Write(str)
+		} else {
+			rw.WriteHeader(http.StatusInternalServerError)
+			tools.GetLogger().Println(err)
+		}
 	}
+
 }

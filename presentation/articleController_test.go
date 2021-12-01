@@ -65,3 +65,38 @@ func TestGetFail(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestGetAll(t *testing.T) {
+	w := httptest.NewRecorder()
+	c := presentation.ArticleController{Service: ServiceActicleMock{Article: &entity.Article{}}}
+
+	c.GetArticles(w, httptest.NewRequest("GET", "/", nil))
+
+	if w.Code != http.StatusOK {
+		t.Error("Did not get expected HTTP status code, got", w.Code)
+		t.Fail()
+	}
+}
+
+func TestGetAllNotFound(t *testing.T) {
+	w := httptest.NewRecorder()
+	c := presentation.ArticleController{Service: ServiceActicleMock{}}
+
+	c.GetArticles(w, httptest.NewRequest("GET", "/", nil))
+
+	if w.Code != http.StatusOK {
+		t.Error("Did not get expected HTTP status code, got", w.Code)
+		t.Fail()
+	}
+}
+func TestGetAllFail(t *testing.T) {
+	w := httptest.NewRecorder()
+	c := presentation.ArticleController{Service: ServiceActicleMock{Error: errors.New("")}}
+
+	c.GetArticles(w, httptest.NewRequest("GET", "/", nil))
+
+	if w.Code != http.StatusInternalServerError {
+		t.Error("Did not get expected HTTP status code, got", w.Code)
+		t.Fail()
+	}
+}

@@ -7,8 +7,8 @@ import (
 
 // Im limiting the add/delete function on this entity, simply by not exposing them on the interface
 type IArticleType interface {
-	Get(id uint, fetchs []string) *entity.ArticleType
-	GetAll(fetchs []string) []entity.ArticleType
+	Get(id uint, fetchs []string) (*entity.ArticleType, error)
+	GetAll(fetchs []string) ([]entity.ArticleType, error)
 	// Add(a *entity.ArticleType) (*entity.ArticleType, error)
 	// Delete(id uint) *entity.ArticleType
 }

@@ -1,3 +1,1 @@
 mode: atomic
-go-micro/main.go:11.13,19.2 5 0
-go-micro/main.go:21.31,30.2 5 0
