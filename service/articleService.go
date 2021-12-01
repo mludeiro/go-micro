@@ -13,21 +13,10 @@ type IActicle interface {
 }
 
 type Article struct {
-	Repository repository.IArticle
+	repository.IArticle
 }
 
-func (this Article) Get(id uint, fetchs []string) (*entity.Article, error) {
-	return this.Repository.Get(id, fetchs)
-}
-
-func (this Article) GetAll(fetchs []string) ([]entity.Article, error) {
-	return this.Repository.GetAll(fetchs)
-}
-
-func (this Article) Add(dto *entity.Article) (*entity.Article, error) {
-	return this.Repository.Add(dto)
-}
-
-func (this Article) Delete(id uint) (*entity.Article, error) {
-	return this.Repository.Delete(id)
+// if you want to, you can wrap or redefine the repository method
+func (a Article) GetAll(fetchs []string) ([]entity.Article, error) {
+	return a.IArticle.GetAll(fetchs)
 }

@@ -22,19 +22,19 @@ func NewContainer() Container {
 			Router: presentation.WebRouter{
 				ArticleController: presentation.ArticleController{
 					Service: service.Article{
-						Repository: repository.Article{
+						IArticle: repository.Article{
 							DataBase: &database},
 					},
 				},
 				ArticleTypeController: presentation.ArticleTypeController{
 					Service: service.ArticleType{
-						Repository: repository.ArticleType{
+						IArticleType: repository.ArticleType{
 							DataBase: &database},
 					},
 				},
 				InvoiceController: presentation.InvoiceController{
 					InvoiceService: service.Invoice{
-						Repository: repository.Invoice{
+						IInvoice: repository.Invoice{
 							DataBase: &database},
 					},
 				},

@@ -43,13 +43,24 @@ func TestGet(t *testing.T) {
 	}
 }
 
+func TestGetNotFound(t *testing.T) {
+	w := httptest.NewRecorder()
+	c := presentation.ArticleController{Service: ServiceActicleMock{}}
+
+	c.GetArticle(w, httptest.NewRequest("GET", "/", nil))
+
+	if w.Code != http.StatusNotFound {
+		t.Error("Did not get expected HTTP status code, got", w.Code)
+		t.Fail()
+	}
+}
 func TestGetFail(t *testing.T) {
 	w := httptest.NewRecorder()
 	c := presentation.ArticleController{Service: ServiceActicleMock{Error: errors.New("")}}
 
 	c.GetArticle(w, httptest.NewRequest("GET", "/", nil))
 
-	if w.Code != http.StatusNotFound {
+	if w.Code != http.StatusInternalServerError {
 		t.Error("Did not get expected HTTP status code, got", w.Code)
 		t.Fail()
 	}

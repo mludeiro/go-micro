@@ -5,10 +5,15 @@ import (
 	"go-micro/repository"
 )
 
-type ArticleType struct {
-	Repository repository.IArticleType
+// Im limiting the add/delete function on this entity, simply by not exposing them on the interface
+type IArticleType interface {
+	Get(id uint, fetchs []string) *entity.ArticleType
+	GetAll(fetchs []string) []entity.ArticleType
+	// Add(a *entity.ArticleType) (*entity.ArticleType, error)
+	// Delete(id uint) *entity.ArticleType
 }
 
-func (this *ArticleType) GetArticleTypes(fetchs []string) []entity.ArticleType {
-	return this.Repository.GetAll(fetchs)
+// bypass the get/getAll
+type ArticleType struct {
+	repository.IArticleType
 }

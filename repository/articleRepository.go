@@ -25,7 +25,7 @@ func (this Article) Get(id uint, fetchs []string) (*entity.Article, error) {
 	}
 
 	query := db.Find(&article, id)
-	if query.Error != nil && query.RowsAffected == 1 {
+	if query.Error == nil && query.RowsAffected == 1 {
 		return &article, nil
 	} else {
 		return nil, query.Error
