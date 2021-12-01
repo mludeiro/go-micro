@@ -1,52 +1,67 @@
 package repository
 
 import (
-	"errors"
 	"go-micro/database"
 	"go-micro/entity"
 )
 
-func GetArticle(id uint, fetchs []string) *entity.Article {
+type IArticle interface {
+	Get(id uint, fetchs []string) (*entity.Article, error)
+	GetAll(fetchs []string) ([]entity.Article, error)
+	Add(a *entity.Article) (*entity.Article, error)
+	Delete(id uint) (*entity.Article, error)
+}
+
+type Article struct {
+	DataBase *database.Database
+}
+
+func (this Article) Get(id uint, fetchs []string) (*entity.Article, error) {
 	article := entity.Article{}
-	db := database.GetDB()
+	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
 	}
 
-	rows := db.Find(&article, id).RowsAffected
-	if rows == 1 {
-		return &article
+	query := db.Find(&article, id)
+	if query.Error == nil && query.RowsAffected == 1 {
+		return &article, nil
 	} else {
-		return nil
+		return nil, query.Error
 	}
 }
 
-func GetArticles(fetchs []string) []entity.Article {
+func (this Article) GetAll(fetchs []string) ([]entity.Article, error) {
 	articles := []entity.Article{}
-	db := database.GetDB()
+	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
 	}
 
-	db.Find(&articles)
-	return articles
+	err := db.Find(&articles).Error
+	return articles, err
 }
 
-func AddArticle(a *entity.Article) (*entity.Article, error) {
-	if database.GetDB().Create(a).RowsAffected != 1 {
-		return nil, errors.New("Error creating new article")
+func (this Article) Add(a *entity.Article) (*entity.Article, error) {
+	query := this.DataBase.GetDB().Create(a)
+	if query.Error != nil {
+		return nil, query.Error
 	}
 	return a, nil
 }
 
-func DeleteArticle(id uint) *entity.Article {
+func (this Article) Delete(id uint) (*entity.Article, error) {
 	article := entity.Article{}
-	rows := database.GetDB().Where("deleted_at is NULL").Delete(&article, id).RowsAffected
-	if rows == 1 {
-		return &article
+	query := this.DataBase.GetDB().Where("deleted_at is NULL").Delete(&article, id)
+	if query.Error != nil {
+		return nil, query.Error
 	} else {
-		return nil
+		if query.RowsAffected == 1 {
+			return &article, nil
+		} else {
+			return nil, nil
+		}
 	}
 }

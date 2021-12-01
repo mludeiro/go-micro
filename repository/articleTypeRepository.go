@@ -6,10 +6,21 @@ import (
 	"go-micro/entity"
 )
 
-func GetArticleType(id uint, fetchs []string) *entity.ArticleType {
+type IArticleType interface {
+	Get(id uint, fetchs []string) *entity.ArticleType
+	GetAll(fetchs []string) []entity.ArticleType
+	Add(a *entity.ArticleType) (*entity.ArticleType, error)
+	Delete(id uint) *entity.ArticleType
+}
+
+type ArticleType struct {
+	DataBase *database.Database
+}
+
+func (this ArticleType) Get(id uint, fetchs []string) *entity.ArticleType {
 	articleType := entity.ArticleType{}
 
-	db := database.GetDB()
+	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
@@ -23,10 +34,10 @@ func GetArticleType(id uint, fetchs []string) *entity.ArticleType {
 	}
 }
 
-func GetArticleTypes(fetchs []string) []entity.ArticleType {
+func (this ArticleType) GetAll(fetchs []string) []entity.ArticleType {
 	articleTypes := []entity.ArticleType{}
 
-	db := database.GetDB()
+	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
@@ -36,16 +47,16 @@ func GetArticleTypes(fetchs []string) []entity.ArticleType {
 	return articleTypes
 }
 
-func AddArticleType(at *entity.ArticleType) (*entity.ArticleType, error) {
-	if database.GetDB().Create(at).RowsAffected != 1 {
+func (this ArticleType) Add(at *entity.ArticleType) (*entity.ArticleType, error) {
+	if this.DataBase.GetDB().Create(at).RowsAffected != 1 {
 		return nil, errors.New("Error creating new article")
 	}
 	return at, nil
 }
 
-func DeleteArticleType(id uint) *entity.ArticleType {
+func (this ArticleType) Delete(id uint) *entity.ArticleType {
 	articleType := entity.ArticleType{}
-	rows := database.GetDB().Where("deleted_at is NULL").Delete(&articleType, id).RowsAffected
+	rows := this.DataBase.GetDB().Delete(&articleType, id).RowsAffected
 	if rows == 1 {
 		return &articleType
 	} else {

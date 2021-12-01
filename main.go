@@ -1,19 +1,19 @@
 package main
 
 import (
-	"go-micro/database"
-	"go-micro/presentation"
+	"go-micro/container"
 	"go-micro/tools"
 	"os"
 	"os/signal"
 )
 
 func main() {
-	database.Initialize(true)
-	database.Migrate()
-	database.CreateSampleData()
+	cont := container.NewContainer()
 
-	go presentation.CreateServer()
+	cont.DataBase.InitializeSqlite().Migrate().CreateSampleData()
+	// 	cont.DataBase.InitializePostgress().Migrate().CreateSampleData()
+
+	go cont.WebServer.CreateServer()
 
 	waitForInterruptSignal()
 }

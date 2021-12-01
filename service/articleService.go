@@ -5,10 +5,18 @@ import (
 	"go-micro/repository"
 )
 
-var GetArticle func(uint, []string) *entity.Article = repository.GetArticle
+type IActicle interface {
+	Get(uint, []string) (*entity.Article, error)
+	GetAll([]string) ([]entity.Article, error)
+	Add(*entity.Article) (*entity.Article, error)
+	Delete(uint) (*entity.Article, error)
+}
 
-var GetArticles func([]string) []entity.Article = repository.GetArticles
+type Article struct {
+	repository.IArticle
+}
 
-var AddArticle func(*entity.Article) (*entity.Article, error) = repository.AddArticle
-
-var DeleteArticle func(uint) *entity.Article = repository.DeleteArticle
+// if you want to, you can wrap or redefine the repository method
+func (a Article) GetAll(fetchs []string) ([]entity.Article, error) {
+	return a.IArticle.GetAll(fetchs)
+}

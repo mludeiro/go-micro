@@ -5,8 +5,13 @@ import (
 	"go-micro/repository"
 )
 
-var GetInvoice func(uint, []string) *entity.Invoice = repository.GetInvoice
+type IInvoice interface {
+	Get(uint, []string) *entity.Invoice
+	GetAll([]string) []entity.Invoice
+	Add(*entity.Invoice) (*entity.Invoice, error)
+}
 
-var GetInvoices func([]string) []entity.Invoice = repository.GetInvoices
-
-var AddInvoice func(*entity.Invoice) (*entity.Invoice, error) = repository.AddInvoice
+// exposing all the repository methos with no filter
+type Invoice struct {
+	repository.IInvoice
+}

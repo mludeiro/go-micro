@@ -6,9 +6,19 @@ import (
 	"go-micro/entity"
 )
 
-func GetInvoice(id uint, fetchs []string) *entity.Invoice {
+type IInvoice interface {
+	Get(id uint, fetchs []string) *entity.Invoice
+	GetAll(fetchs []string) []entity.Invoice
+	Add(a *entity.Invoice) (*entity.Invoice, error)
+}
+
+type Invoice struct {
+	DataBase *database.Database
+}
+
+func (this Invoice) Get(id uint, fetchs []string) *entity.Invoice {
 	dto := entity.Invoice{}
-	db := database.GetDB()
+	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
@@ -22,9 +32,9 @@ func GetInvoice(id uint, fetchs []string) *entity.Invoice {
 	}
 }
 
-func GetInvoices(fetchs []string) []entity.Invoice {
+func (this Invoice) GetAll(fetchs []string) []entity.Invoice {
 	dtos := []entity.Invoice{}
-	db := database.GetDB()
+	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
@@ -34,8 +44,8 @@ func GetInvoices(fetchs []string) []entity.Invoice {
 	return dtos
 }
 
-func AddInvoice(a *entity.Invoice) (*entity.Invoice, error) {
-	if database.GetDB().Create(a).RowsAffected != 1 {
+func (this Invoice) Add(a *entity.Invoice) (*entity.Invoice, error) {
+	if this.DataBase.GetDB().Create(a).RowsAffected != 1 {
 		return nil, errors.New("Error creating new Invoice")
 	}
 	return a, nil
