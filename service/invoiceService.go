@@ -5,7 +5,7 @@ import (
 	"go-micro/repository"
 )
 
-type IInvoice interface {
+type IInvoiceService interface {
 	Get(uint, []string) *entity.Invoice
 	GetAll([]string) []entity.Invoice
 	Add(*entity.Invoice) (*entity.Invoice, error)
@@ -13,5 +13,5 @@ type IInvoice interface {
 
 // exposing all the repository methos with no filter
 type Invoice struct {
-	repository.IInvoice
+	repository.IInvoiceRepository
 }

@@ -5,7 +5,7 @@ import (
 	"go-micro/entity"
 )
 
-type IArticle interface {
+type IArticleRepository interface {
 	Get(id uint, fetchs []string) (*entity.Article, error)
 	GetAll(fetchs []string) ([]entity.Article, error)
 	Add(a *entity.Article) (*entity.Article, error)

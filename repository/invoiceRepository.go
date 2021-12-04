@@ -6,7 +6,7 @@ import (
 	"go-micro/entity"
 )
 
-type IInvoice interface {
+type IInvoiceRepository interface {
 	Get(id uint, fetchs []string) *entity.Invoice
 	GetAll(fetchs []string) []entity.Invoice
 	Add(a *entity.Invoice) (*entity.Invoice, error)

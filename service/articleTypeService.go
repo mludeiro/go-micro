@@ -15,5 +15,5 @@ type IArticleType interface {
 
 // bypass the get/getAll
 type ArticleType struct {
-	repository.IArticleType
+	repository.IArticleTypeRepository
 }

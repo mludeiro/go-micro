@@ -9,7 +9,7 @@ import (
 )
 
 type InvoiceController struct {
-	InvoiceService service.IInvoice
+	InvoiceService service.IInvoiceService
 }
 
 func (this InvoiceController) Get(rw http.ResponseWriter, r *http.Request) {

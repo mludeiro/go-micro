@@ -5,7 +5,7 @@ import (
 	"go-micro/repository"
 )
 
-type IActicle interface {
+type IActicleService interface {
 	Get(uint, []string) (*entity.Article, error)
 	GetAll([]string) ([]entity.Article, error)
 	Add(*entity.Article) (*entity.Article, error)
@@ -13,10 +13,10 @@ type IActicle interface {
 }
 
 type Article struct {
-	repository.IArticle
+	repository.IArticleRepository
 }
 
 // if you want to, you can wrap or redefine the repository method
 func (a Article) GetAll(fetchs []string) ([]entity.Article, error) {
-	return a.IArticle.GetAll(fetchs)
+	return a.IArticleRepository.GetAll(fetchs)
 }
