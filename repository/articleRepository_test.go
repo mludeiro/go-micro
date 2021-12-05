@@ -4,14 +4,16 @@ import (
 	"go-micro/database"
 	"go-micro/entity"
 	"go-micro/repository"
+	"go-micro/tools"
+	"io"
 	"testing"
 )
 
 func TestArticle(t *testing.T) {
-	//	tools.GetLogger().SetOutput(io.Discard)
-	database := (&database.Database{}).InitializeSqlite().Migrate()
+	tools.GetLogger().SetOutput(io.Discard)
+	db := (&database.Database{}).InitializeSqlite().Migrate()
 
-	repo := repository.Article{DataBase: database}
+	repo := repository.Article{DataBase: db}
 	dto, err := repo.Add(&entity.Article{Name: "test"})
 	if dto == nil || err != nil {
 		t.Fatalf("Null return")
@@ -35,13 +37,14 @@ func TestArticle(t *testing.T) {
 		t.Fatalf("Selecting deleted values")
 	}
 
-	lista, _ := repo.GetAll([]string{})
+	lista, _ := repo.GetAll(database.Query{})
 	if len(lista) != 0 {
 		t.Fatalf("Too many values")
 	}
 
 }
 func TestInsertWrongArticle(t *testing.T) {
+	tools.GetLogger().SetOutput(io.Discard)
 	database := (&database.Database{}).InitializeSqlite().Migrate()
 
 	repo := repository.Article{DataBase: database}

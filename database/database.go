@@ -16,10 +16,6 @@ type Database struct {
 	gormDB *gorm.DB
 }
 
-func (db *Database) GetDB() *gorm.DB {
-	return db.gormDB
-}
-
 func (db *Database) Migrate() *Database {
 	db.GetDB().AutoMigrate(&entity.ArticleType{}, &entity.Article{}, &entity.Client{}, &entity.Invoice{}, &entity.InvoiceLine{})
 	return db
@@ -32,7 +28,7 @@ func (db *Database) CreateSampleData() *Database {
 
 	db.GetDB().Create(&shoes).Create(&pants).Create(&hats)
 
-	tennis := entity.Article{Name: "Tennis shoes", Price: 120, ArticleTypeID: shoes.ID}
+	tennis := entity.Article{Name: "Tennis", Price: 120, ArticleTypeID: shoes.ID}
 	jeans := &entity.Article{Name: "Jeans", Price: 30, ArticleTypeID: pants.ID}
 
 	db.GetDB().Create(&tennis).
@@ -100,4 +96,28 @@ func createGormConfig() *gorm.Config {
 				Colorful:                  true,        // Disable color
 			}),
 	}
+}
+
+func (db *Database) GetDB() *gorm.DB {
+	return db.gormDB
+}
+
+func (db *Database) GetQueryDB(query Query) *gorm.DB {
+	tx := db.GetDB()
+
+	for _, fetch := range query.Fetchs {
+		tx = tx.Preload(fetch)
+	}
+
+	for _, cond := range query.Conditions {
+		switch cond.Comparator {
+		case "eq":
+			tx = tx.Where(cond.Field, cond.Value)
+		}
+	}
+
+	for _, order := range query.OrderBy {
+		tx = tx.Order(order)
+	}
+	return tx
 }

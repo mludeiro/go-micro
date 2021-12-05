@@ -2,6 +2,7 @@ package presentation
 
 import (
 	"errors"
+	"go-micro/database"
 	"net/http"
 	"strconv"
 	"strings"
@@ -46,10 +47,40 @@ func GetArrayStringQueryParam(r *http.Request, param string) ([]string, error) {
 		return []string{}, nil
 	}
 
-	return strings.Split(strings.Replace(val, " ", "", -1), ","), nil
+	//return strings.Split(strings.Replace(val, " ", "", -1), ","), nil
+	return strings.Split(val, ","), nil
 }
 
 func GetExpand(r *http.Request) []string {
 	val, _ := GetArrayStringQueryParam(r, "expand")
 	return val
+}
+
+func GetOrder(r *http.Request) []string {
+	val, _ := GetArrayStringQueryParam(r, "order")
+	return val
+}
+
+func GetCondition(r *http.Request) []database.Condition {
+	val, _ := GetArrayStringQueryParam(r, "condition")
+
+	conditions := []database.Condition{}
+
+	for _, cond := range val {
+		elems := strings.Split(cond, " ")
+		if len(elems) != 3 {
+			return []database.Condition{}
+		}
+		conditions = append(conditions, database.Condition{Field: elems[0], Comparator: elems[1], Value: elems[2]})
+	}
+
+	return conditions
+}
+
+func GetQuery(r *http.Request) database.Query {
+	return database.Query{
+		Fetchs:     GetExpand(r),
+		Conditions: GetCondition(r),
+		OrderBy:    GetOrder(r),
+	}
 }
