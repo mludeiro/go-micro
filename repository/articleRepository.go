@@ -7,7 +7,7 @@ import (
 
 type IArticleRepository interface {
 	Get(id uint, fetchs []string) (*entity.Article, error)
-	GetAll(fetchs []string) ([]entity.Article, error)
+	GetAll(query entity.Query) (entity.ArticleResultSet, error)
 	Add(a *entity.Article) (*entity.Article, error)
 	Delete(id uint) (*entity.Article, error)
 }
@@ -32,15 +32,10 @@ func (this Article) Get(id uint, fetchs []string) (*entity.Article, error) {
 	}
 }
 
-func (this Article) GetAll(fetchs []string) ([]entity.Article, error) {
-	articles := []entity.Article{}
-	db := this.DataBase.GetDB()
+func (this Article) GetAll(query entity.Query) (entity.ArticleResultSet, error) {
+	articles := entity.ArticleResultSet{Query: query}
+	err := this.DataBase.GetQueryDB(query).GetResult(&articles.ResultSet, &articles.Data)
 
-	for _, fetch := range fetchs {
-		db = db.Preload(fetch)
-	}
-
-	err := db.Find(&articles).Error
 	return articles, err
 }
 

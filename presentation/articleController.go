@@ -57,7 +57,7 @@ func (this *ArticleController) DeleteArticle(rw http.ResponseWriter, r *http.Req
 }
 
 func (this *ArticleController) GetArticles(rw http.ResponseWriter, r *http.Request) {
-	lst, err := this.Service.GetAll(GetExpand(r))
+	lst, err := this.Service.GetAll(GetQuery(r))
 
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
