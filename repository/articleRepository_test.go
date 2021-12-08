@@ -37,8 +37,8 @@ func TestArticle(t *testing.T) {
 		t.Fatalf("Selecting deleted values")
 	}
 
-	lista, _ := repo.GetAll(database.Query{})
-	if len(lista) != 0 {
+	lista, _ := repo.GetAll(entity.Query{})
+	if len(lista.Data) != 0 {
 		t.Fatalf("Too many values")
 	}
 

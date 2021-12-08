@@ -2,7 +2,6 @@ package presentation_test
 
 import (
 	"errors"
-	"go-micro/database"
 	"go-micro/entity"
 	"go-micro/presentation"
 	"net/http"
@@ -20,8 +19,8 @@ func (this ServiceActicleMock) Get(uint, []string) (*entity.Article, error) {
 	return this.Article, this.Error
 }
 
-func (this ServiceActicleMock) GetAll(database.Query) ([]entity.Article, error) {
-	return this.ArticleArray, this.Error
+func (this ServiceActicleMock) GetAll(query entity.Query) (entity.ArticleResultSet, error) {
+	return entity.ArticleResultSet{Data: this.ArticleArray}, this.Error
 }
 
 func (this ServiceActicleMock) Add(*entity.Article) (*entity.Article, error) {

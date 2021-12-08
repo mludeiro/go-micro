@@ -102,7 +102,7 @@ func (db *Database) GetDB() *gorm.DB {
 	return db.gormDB
 }
 
-func (db *Database) GetQueryDB(query Query) *gorm.DB {
+func (db *Database) GetQueryDB(query entity.Query) *QueryExecutor {
 	tx := db.GetDB()
 
 	for _, fetch := range query.Fetchs {
@@ -113,11 +113,14 @@ func (db *Database) GetQueryDB(query Query) *gorm.DB {
 		switch cond.Comparator {
 		case "eq":
 			tx = tx.Where(cond.Field, cond.Value)
+		case "lk":
+			tx = tx.Where(cond.Field, cond.Value)
 		}
 	}
 
 	for _, order := range query.OrderBy {
 		tx = tx.Order(order)
 	}
-	return tx
+
+	return &QueryExecutor{trx: tx, pageSize: query.GetPageSize(), pageNumber: query.PageNumber}
 }

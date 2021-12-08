@@ -17,6 +17,12 @@ type Article struct {
 	ArticleType   *ArticleType   `json:",omitempty"`
 }
 
+type ArticleResultSet struct {
+	ResultSet
+	Query
+	Data []Article
+}
+
 func (Article) TableName() string {
 	return "Article"
 }

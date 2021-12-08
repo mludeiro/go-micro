@@ -2,7 +2,7 @@ package presentation
 
 import (
 	"errors"
-	"go-micro/database"
+	"go-micro/entity"
 	"net/http"
 	"strconv"
 	"strings"
@@ -61,24 +61,24 @@ func GetOrder(r *http.Request) []string {
 	return val
 }
 
-func GetCondition(r *http.Request) []database.Condition {
+func GetCondition(r *http.Request) []entity.Condition {
 	val, _ := GetArrayStringQueryParam(r, "condition")
 
-	conditions := []database.Condition{}
+	conditions := []entity.Condition{}
 
 	for _, cond := range val {
 		elems := strings.Split(cond, " ")
 		if len(elems) != 3 {
-			return []database.Condition{}
+			return []entity.Condition{}
 		}
-		conditions = append(conditions, database.Condition{Field: elems[0], Comparator: elems[1], Value: elems[2]})
+		conditions = append(conditions, entity.Condition{Field: elems[0], Comparator: elems[1], Value: elems[2]})
 	}
 
 	return conditions
 }
 
-func GetQuery(r *http.Request) database.Query {
-	return database.Query{
+func GetQuery(r *http.Request) entity.Query {
+	return entity.Query{
 		Fetchs:     GetExpand(r),
 		Conditions: GetCondition(r),
 		OrderBy:    GetOrder(r),

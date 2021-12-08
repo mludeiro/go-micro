@@ -10,7 +10,6 @@ GET http://localhost:9000/articles/1?expand=ArticleType
 GET http://localhost:9000/articles
 
 ### GET MANY WITH FILTER
-
 GET http://localhost:9000/articles?condition=name%20eq%20Tennis
 
 ### GET MANY WITH ORDERING
