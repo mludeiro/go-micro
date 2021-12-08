@@ -1,13 +1,15 @@
-FROM golang:1.16-alpine
-
-RUN apk --no-cache add make git gcc libtool musl-dev ca-certificates dumb-init 
+FROM golang:1.17-alpine3.15
 
 # Set destination for COPY
 WORKDIR /app
 COPY . ./
 
 # Download Go modules and build
-RUN go mod download &&  go build -o /go-micro && rm -rf /go
+RUN apk --no-cache add build-base \
+    && go mod download -x \
+    && go build -o /go-micro -x\
+    && rm -rf /go \
+    && apk del build-base 
 
 EXPOSE 9000
 
