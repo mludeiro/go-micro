@@ -21,7 +21,7 @@ func (this *WebServer) CreateServer() {
 		IdleTimeout:  120 * time.Second,       // max time for connections using TCP Keep-Alive
 	}
 
-	tools.GetLogger().Println("Starting server on port 9090")
+	tools.GetLogger().Println("Starting server on port 9000")
 
 	err := this.server.ListenAndServe()
 	if err != nil {
