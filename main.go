@@ -16,6 +16,7 @@ func main() {
 	go cont.WebServer.CreateServer()
 
 	waitForInterruptSignal()
+	 error de compilacion
 }
 
 func waitForInterruptSignal() {
