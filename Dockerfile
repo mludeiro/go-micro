@@ -13,5 +13,11 @@ RUN apk --no-cache add build-base \
 
 EXPOSE 9000
 
+# Create a group and user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Tell docker that all future commands should run as the appuser user
+USER appuser
+
 # Run
 CMD [ "/go-micro" ]

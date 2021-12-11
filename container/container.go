@@ -34,7 +34,7 @@ func NewContainer() Container {
 				},
 				InvoiceController: presentation.InvoiceController{
 					InvoiceService: service.Invoice{
-						IInvoiceRepository: repository.Invoice{
+						IInvoiceRepository: &repository.Invoice{
 							DataBase: &database},
 					},
 				},

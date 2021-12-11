@@ -18,18 +18,29 @@ func TestInvoice(t *testing.T) {
 	if dto == nil || err != nil {
 		t.Fatalf("Null return")
 	}
-	sel := repo.Get(dto.ID, []string{})
+	sel, err := repo.Get(dto.ID, []string{})
+
+	if err != nil {
+		t.Fatalf("Error")
+	}
 
 	if sel == nil {
 		t.Fatalf("Not created")
 	}
 
-	sel = repo.Get(dto.ID, []string{})
+	sel, err = repo.Get(dto.ID, []string{})
+	if err != nil {
+		t.Fatalf("Error")
+	}
 	if sel == nil {
 		t.Fatalf("Selecting deleted values")
 	}
 
-	if len(repo.GetAll([]string{})) != 1 {
+	all, err := repo.GetAll([]string{})
+	if err != nil {
+		t.Fatalf("Error")
+	}
+	if len(all) != 1 {
 		t.Fatalf("No values")
 	}
 

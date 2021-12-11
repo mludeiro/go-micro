@@ -12,11 +12,13 @@ type InvoiceController struct {
 	InvoiceService service.IInvoiceService
 }
 
-func (this InvoiceController) Get(rw http.ResponseWriter, r *http.Request) {
+func (this *InvoiceController) Get(rw http.ResponseWriter, r *http.Request) {
 	id, _ := GetUIntParam(r, "id")
-	article := this.InvoiceService.Get(id, GetExpand(r))
+	article, err := this.InvoiceService.Get(id, GetExpand(r))
 
-	if article == nil {
+	if err != nil {
+		rw.WriteHeader(http.StatusInternalServerError)
+	} else if article == nil {
 		rw.WriteHeader(http.StatusNotFound)
 	} else {
 		str, err := json.Marshal(article)
@@ -32,19 +34,24 @@ func (this InvoiceController) Get(rw http.ResponseWriter, r *http.Request) {
 
 }
 
-func (this InvoiceController) GetInvoices(rw http.ResponseWriter, r *http.Request) {
-	str, err := json.Marshal(this.InvoiceService.GetAll(GetExpand(r)))
-
-	if err == nil {
-		rw.WriteHeader(http.StatusOK)
-		rw.Write(str)
-	} else {
+func (this *InvoiceController) GetInvoices(rw http.ResponseWriter, r *http.Request) {
+	data, err := this.InvoiceService.GetAll(GetExpand(r))
+	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
-		tools.GetLogger().Println(err)
+	} else {
+		str, err := json.Marshal(data)
+		if err == nil {
+			rw.WriteHeader(http.StatusOK)
+			rw.Write(str)
+		} else {
+			rw.WriteHeader(http.StatusInternalServerError)
+			tools.GetLogger().Println(err)
+		}
 	}
+
 }
 
-func (this InvoiceController) PostInvoice(rw http.ResponseWriter, r *http.Request) {
+func (this *InvoiceController) PostInvoice(rw http.ResponseWriter, r *http.Request) {
 	dto := &entity.Invoice{}
 	err := json.NewDecoder(r.Body).Decode(dto)
 
