@@ -7,8 +7,8 @@ import (
 )
 
 type IInvoiceRepository interface {
-	Get(id uint, fetchs []string) *entity.Invoice
-	GetAll(fetchs []string) []entity.Invoice
+	Get(id uint, fetchs []string) (*entity.Invoice, error)
+	GetAll(fetchs []string) ([]entity.Invoice, error)
 	Add(a *entity.Invoice) (*entity.Invoice, error)
 }
 
@@ -16,35 +16,39 @@ type Invoice struct {
 	DataBase *database.Database
 }
 
-func (this Invoice) Get(id uint, fetchs []string) *entity.Invoice {
+func (this *Invoice) Get(id uint, fetchs []string) (*entity.Invoice, error) {
 	dto := entity.Invoice{}
+
 	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
 	}
 
-	rows := db.Find(&dto, id).RowsAffected
-	if rows == 1 {
-		return &dto
+	query := db.Find(&dto, id)
+	if query.Error != nil {
+		return nil, query.Error
+	} else if query.RowsAffected == 1 {
+		return &dto, nil
 	} else {
-		return nil
+		return nil, nil
 	}
 }
 
-func (this Invoice) GetAll(fetchs []string) []entity.Invoice {
-	dtos := []entity.Invoice{}
+func (this *Invoice) GetAll(fetchs []string) ([]entity.Invoice, error) {
+	dto := []entity.Invoice{}
+
 	db := this.DataBase.GetDB()
 
 	for _, fetch := range fetchs {
 		db = db.Preload(fetch)
 	}
 
-	db.Find(&dtos)
-	return dtos
+	query := db.Find(&dto)
+	return dto, query.Error
 }
 
-func (this Invoice) Add(a *entity.Invoice) (*entity.Invoice, error) {
+func (this *Invoice) Add(a *entity.Invoice) (*entity.Invoice, error) {
 	if this.DataBase.GetDB().Create(a).RowsAffected != 1 {
 		return nil, errors.New("Error creating new Invoice")
 	}

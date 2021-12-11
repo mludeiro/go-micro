@@ -6,8 +6,8 @@ import (
 )
 
 type IInvoiceService interface {
-	Get(uint, []string) *entity.Invoice
-	GetAll([]string) []entity.Invoice
+	Get(uint, []string) (*entity.Invoice, error)
+	GetAll([]string) ([]entity.Invoice, error)
 	Add(*entity.Invoice) (*entity.Invoice, error)
 }
 

@@ -20,6 +20,6 @@ jobs:
     - name: Build
       run: go build -v ./...
 
-    - name: Test
+    - name: Unit Test and Coverage
       run: chmod +x coverage.sh && ./coverage.sh
 
