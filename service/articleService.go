@@ -17,6 +17,6 @@ type Article struct {
 }
 
 // if you want to, you can wrap or redefine the repository method
-func (a Article) GetAll(query entity.Query) (entity.ArticleResultSet, error) {
+func (a *Article) GetAll(query entity.Query) (entity.ArticleResultSet, error) {
 	return a.IArticleRepository.GetAll(query)
 }

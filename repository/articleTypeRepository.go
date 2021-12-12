@@ -16,7 +16,7 @@ type ArticleType struct {
 	DataBase *database.Database
 }
 
-func (this ArticleType) Get(id uint, fetchs []string) (*entity.ArticleType, error) {
+func (this *ArticleType) Get(id uint, fetchs []string) (*entity.ArticleType, error) {
 	articleType := entity.ArticleType{}
 
 	db := this.DataBase.GetDB()
@@ -35,7 +35,7 @@ func (this ArticleType) Get(id uint, fetchs []string) (*entity.ArticleType, erro
 	}
 }
 
-func (this ArticleType) GetAll(fetchs []string) ([]entity.ArticleType, error) {
+func (this *ArticleType) GetAll(fetchs []string) ([]entity.ArticleType, error) {
 	articleTypes := []entity.ArticleType{}
 
 	db := this.DataBase.GetDB()
@@ -48,7 +48,7 @@ func (this ArticleType) GetAll(fetchs []string) ([]entity.ArticleType, error) {
 	return articleTypes, query.Error
 }
 
-func (this ArticleType) Add(at *entity.ArticleType) (*entity.ArticleType, error) {
+func (this *ArticleType) Add(at *entity.ArticleType) (*entity.ArticleType, error) {
 	query := this.DataBase.GetDB().Create(at)
 	if query.Error != nil {
 		return nil, query.Error
@@ -57,7 +57,7 @@ func (this ArticleType) Add(at *entity.ArticleType) (*entity.ArticleType, error)
 	}
 }
 
-func (this ArticleType) Delete(id uint) (*entity.ArticleType, error) {
+func (this *ArticleType) Delete(id uint) (*entity.ArticleType, error) {
 	articleType := entity.ArticleType{}
 	query := this.DataBase.GetDB().Delete(&articleType, id)
 	if query.Error != nil {
