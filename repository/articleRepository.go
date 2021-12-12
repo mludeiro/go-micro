@@ -16,7 +16,7 @@ type Article struct {
 	DataBase *database.Database
 }
 
-func (this Article) Get(id uint, fetchs []string) (*entity.Article, error) {
+func (this *Article) Get(id uint, fetchs []string) (*entity.Article, error) {
 	article := entity.Article{}
 	db := this.DataBase.GetDB()
 
@@ -32,14 +32,14 @@ func (this Article) Get(id uint, fetchs []string) (*entity.Article, error) {
 	}
 }
 
-func (this Article) GetAll(query entity.Query) (entity.ArticleResultSet, error) {
+func (this *Article) GetAll(query entity.Query) (entity.ArticleResultSet, error) {
 	articles := entity.ArticleResultSet{Query: query}
 	err := this.DataBase.GetQueryDB(query).GetResult(&articles.ResultSet, &articles.Data)
 
 	return articles, err
 }
 
-func (this Article) Add(a *entity.Article) (*entity.Article, error) {
+func (this *Article) Add(a *entity.Article) (*entity.Article, error) {
 	query := this.DataBase.GetDB().Create(a)
 	if query.Error != nil {
 		return nil, query.Error
@@ -47,7 +47,7 @@ func (this Article) Add(a *entity.Article) (*entity.Article, error) {
 	return a, nil
 }
 
-func (this Article) Delete(id uint) (*entity.Article, error) {
+func (this *Article) Delete(id uint) (*entity.Article, error) {
 	article := entity.Article{}
 	query := this.DataBase.GetDB().Where("deleted_at is NULL").Delete(&article, id)
 	if query.Error != nil {
