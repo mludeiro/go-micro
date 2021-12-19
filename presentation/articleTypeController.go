@@ -1,3 +1,17 @@
+// Package presentation API.
+//
+// The purpose of this application is to provide a clear way to create an rest API
+//
+// Schemes: http
+// BasePAth: /
+// Version: 1.0.0
+//
+// Consumes:
+// - application/json
+//
+// Produces:
+// - application/json
+// swagger:meta
 package presentation
 
 import (
