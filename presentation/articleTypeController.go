@@ -25,8 +25,8 @@ type ArticleTypeController struct {
 	Service service.IArticleType
 }
 
-func (this *ArticleTypeController) GetAll(rw http.ResponseWriter, r *http.Request) {
-	data, err := this.Service.GetAll(GetExpand(r))
+func (cont *ArticleTypeController) GetAll(rw http.ResponseWriter, r *http.Request) {
+	data, err := cont.Service.GetAll(GetExpand(r))
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
 	} else {

@@ -15,12 +15,12 @@ type ServiceActicleTypeMock struct {
 	ArticleArray []entity.ArticleType
 }
 
-func (this ServiceActicleTypeMock) Get(uint, []string) (*entity.ArticleType, error) {
-	return this.ArticleType, this.Error
+func (mock ServiceActicleTypeMock) Get(uint, []string) (*entity.ArticleType, error) {
+	return mock.ArticleType, mock.Error
 }
 
-func (this ServiceActicleTypeMock) GetAll([]string) ([]entity.ArticleType, error) {
-	return this.ArticleArray, this.Error
+func (mock ServiceActicleTypeMock) GetAll([]string) ([]entity.ArticleType, error) {
+	return mock.ArticleArray, mock.Error
 }
 
 func TestGetAllArticleType(t *testing.T) {

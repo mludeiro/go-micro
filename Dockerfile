@@ -11,7 +11,7 @@ RUN apk --no-cache add build-base \
     && rm -rf /go \
     && apk del build-base 
 
-EXPOSE 9000
+EXPOSE 80
 
 # Create a group and user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup

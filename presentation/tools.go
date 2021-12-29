@@ -14,13 +14,13 @@ func GetUIntParam(r *http.Request, param string) (uint, error) {
 	val, ok := mux.Vars(r)[param]
 
 	if !ok {
-		return 0, errors.New("Parameter not found")
+		return 0, errors.New("parameter not found")
 	}
 
 	// convert the value into an integer and return
 	ival, err := strconv.Atoi(val)
 	if err != nil {
-		return 0, errors.New("Error parsing param")
+		return 0, errors.New("error parsing param")
 	}
 
 	return uint(ival), nil
@@ -30,7 +30,7 @@ func GetStringQueryParam(r *http.Request, param string) (string, error) {
 	val := r.URL.Query().Get(param)
 
 	if len(val) == 0 {
-		return "", errors.New("Parameter not found")
+		return "", errors.New("parameter not found")
 	}
 
 	return val, nil

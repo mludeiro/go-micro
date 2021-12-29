@@ -7,36 +7,36 @@ import (
 )
 
 type WebRouter struct {
-	router                *mux.Router
+	muxRuter              *mux.Router
 	ArticleController     ArticleController
 	ArticleTypeController ArticleTypeController
 	InvoiceController     InvoiceController
 }
 
-func (this *WebRouter) GetRouter() *mux.Router {
-	if this.router != nil {
-		return this.router
+func (router *WebRouter) GetRouter() *mux.Router {
+	if router.muxRuter != nil {
+		return router.muxRuter
 	}
 
 	sm := mux.NewRouter()
 
-	sm.Methods(http.MethodGet).Path("/articles/{id:[0-9]+}").HandlerFunc(this.ArticleController.GetArticle)
-	sm.Methods(http.MethodGet).Path("/articles").HandlerFunc(this.ArticleController.GetArticles)
+	sm.Methods(http.MethodGet).Path("/articles/{id:[0-9]+}").HandlerFunc(router.ArticleController.GetArticle)
+	sm.Methods(http.MethodGet).Path("/articles").HandlerFunc(router.ArticleController.GetArticles)
 
-	sm.Methods(http.MethodDelete).Path("/articles/{id:[0-9]+}").HandlerFunc(this.ArticleController.DeleteArticle)
-	sm.Methods(http.MethodPost).Path("/articles").HandlerFunc(this.ArticleController.PostArticle)
+	sm.Methods(http.MethodDelete).Path("/articles/{id:[0-9]+}").HandlerFunc(router.ArticleController.DeleteArticle)
+	sm.Methods(http.MethodPost).Path("/articles").HandlerFunc(router.ArticleController.PostArticle)
 
 	// Sometimes we only need handlers ;-)
-	sm.Methods(http.MethodGet).Path("/articleTypes").HandlerFunc(this.ArticleTypeController.GetAll)
+	sm.Methods(http.MethodGet).Path("/articleTypes").HandlerFunc(router.ArticleTypeController.GetAll)
 
 	//invo := InvoiceController{InvoiceService: service.Invoice{Repository: &repository.Invoice{DB: database.GetDB()}}}
-	sm.Methods(http.MethodGet).Path("/invoices/{id:[0-9]+}").HandlerFunc(this.InvoiceController.Get)
-	sm.Methods(http.MethodGet).Path("/invoices").HandlerFunc(this.InvoiceController.GetInvoices)
-	sm.Methods(http.MethodPost).Path("/invoices").HandlerFunc(this.InvoiceController.PostInvoice)
+	sm.Methods(http.MethodGet).Path("/invoices/{id:[0-9]+}").HandlerFunc(router.InvoiceController.Get)
+	sm.Methods(http.MethodGet).Path("/invoices").HandlerFunc(router.InvoiceController.GetInvoices)
+	sm.Methods(http.MethodPost).Path("/invoices").HandlerFunc(router.InvoiceController.PostInvoice)
 
 	// Just to log the calls, response code and time spent
 	sm.Use(LogMiddleWare)
 
-	this.router = sm
-	return this.router
+	router.muxRuter = sm
+	return router.muxRuter
 }
