@@ -1,7 +1,7 @@
 ###
 
-GET http://localhost:9000/articleTypes
+GET http://localhost:80/articleTypes
 
 ###
 
-GET http://localhost:9000/articleTypes?expand=Article
+GET http://localhost:80/articleTypes?expand=Article

@@ -16,16 +16,16 @@ type ServiceInvoiceMock struct {
 	InvoiceArray []entity.Invoice
 }
 
-func (this *ServiceInvoiceMock) Get(uint, []string) (*entity.Invoice, error) {
-	return this.Invoice, this.Error
+func (mock *ServiceInvoiceMock) Get(uint, []string) (*entity.Invoice, error) {
+	return mock.Invoice, mock.Error
 }
 
-func (this *ServiceInvoiceMock) GetAll([]string) ([]entity.Invoice, error) {
-	return this.InvoiceArray, this.Error
+func (mock *ServiceInvoiceMock) GetAll([]string) ([]entity.Invoice, error) {
+	return mock.InvoiceArray, mock.Error
 }
 
-func (this *ServiceInvoiceMock) Add(*entity.Invoice) (*entity.Invoice, error) {
-	return this.Invoice, this.Error
+func (mock *ServiceInvoiceMock) Add(*entity.Invoice) (*entity.Invoice, error) {
+	return mock.Invoice, mock.Error
 }
 
 func TestGetAllInvoices(t *testing.T) {

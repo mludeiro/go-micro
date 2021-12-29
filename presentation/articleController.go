@@ -12,9 +12,9 @@ type ArticleController struct {
 	Service service.IActicleService
 }
 
-func (this *ArticleController) GetArticle(rw http.ResponseWriter, r *http.Request) {
+func (cont *ArticleController) GetArticle(rw http.ResponseWriter, r *http.Request) {
 	id, _ := GetUIntParam(r, "id")
-	article, err := this.Service.Get(id, GetExpand(r))
+	article, err := cont.Service.Get(id, GetExpand(r))
 
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
@@ -34,9 +34,9 @@ func (this *ArticleController) GetArticle(rw http.ResponseWriter, r *http.Reques
 
 }
 
-func (this *ArticleController) DeleteArticle(rw http.ResponseWriter, r *http.Request) {
+func (cont *ArticleController) DeleteArticle(rw http.ResponseWriter, r *http.Request) {
 	id, _ := GetUIntParam(r, "id")
-	article, err := this.Service.Delete(id)
+	article, err := cont.Service.Delete(id)
 
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
@@ -56,8 +56,8 @@ func (this *ArticleController) DeleteArticle(rw http.ResponseWriter, r *http.Req
 
 }
 
-func (this *ArticleController) GetArticles(rw http.ResponseWriter, r *http.Request) {
-	lst, err := this.Service.GetAll(GetQuery(r))
+func (cont *ArticleController) GetArticles(rw http.ResponseWriter, r *http.Request) {
+	lst, err := cont.Service.GetAll(GetQuery(r))
 
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
@@ -74,7 +74,7 @@ func (this *ArticleController) GetArticles(rw http.ResponseWriter, r *http.Reque
 	}
 }
 
-func (this *ArticleController) PostArticle(rw http.ResponseWriter, r *http.Request) {
+func (cont *ArticleController) PostArticle(rw http.ResponseWriter, r *http.Request) {
 	dto := &entity.Article{}
 	err := json.NewDecoder(r.Body).Decode(dto)
 
@@ -85,7 +85,7 @@ func (this *ArticleController) PostArticle(rw http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	dto, err = this.Service.Add(dto)
+	dto, err = cont.Service.Add(dto)
 
 	if err != nil {
 		tools.GetLogger().Println(err)
