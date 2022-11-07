@@ -1,6 +1,7 @@
 package presentation
 
 import (
+	"fmt"
 	"go-micro/tools"
 	"net/http"
 	"time"
@@ -12,8 +13,14 @@ type WebServer struct {
 }
 
 func (webServer *WebServer) CreateServer() {
+	port := 80
+
+	if !tools.IsRunningInDockerContainer() {
+		port = 8080
+	}
+
 	webServer.server = http.Server{
-		Addr:         ":80",                        // configure the bind address
+		Addr:         fmt.Sprintf(":%d", port),     // configure the bind address
 		Handler:      webServer.Router.GetRouter(), // set the default handler
 		ErrorLog:     tools.GetLogger(),            // set the logger for the server
 		ReadTimeout:  5 * time.Second,              // max time to read request from the client
@@ -21,7 +28,7 @@ func (webServer *WebServer) CreateServer() {
 		IdleTimeout:  120 * time.Second,            // max time for connections using TCP Keep-Alive
 	}
 
-	tools.GetLogger().Println("Starting server on port 80")
+	tools.GetLogger().Println("Starting server on port ", port)
 
 	err := webServer.server.ListenAndServe()
 	if err != nil {

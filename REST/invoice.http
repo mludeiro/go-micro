@@ -1,24 +1,24 @@
 ### GET ONE
 
-GET http://localhost:9000/invoices/1
+GET http://localhost:8080/invoices/1
 ### GET ONE With details
 
-GET http://localhost:9000/invoices/1?expand=Client,InvoiceLine,InvoiceLine.Article
+GET http://localhost:8080/invoices/1?expand=Client,InvoiceLine,InvoiceLine.Article
 
 ### GET MANY
 
-GET http://localhost:9000/invoices
+GET http://localhost:8080/invoices
 
 ### GET MANY with details
 
-GET http://localhost:9000/invoices?expand=Client
+GET http://localhost:8080/invoices?expand=Client
 
 
 
 
 ### CREATE
 
-POST http://localhost:9000/invoices
+POST http://localhost:8080/invoices
 
   {
     "Name": "Smoking Pant",
