@@ -100,3 +100,15 @@ func TestGetAllFail(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func Delete(t *testing.T) {
+	w := httptest.NewRecorder()
+	c := presentation.ArticleController{Service: ServiceActicleMock{Error: errors.New("")}}
+
+	c.DeleteArticle(w, httptest.NewRequest("DELETE", "/1", nil))
+
+	if w.Code != http.StatusInternalServerError {
+		t.Error("Did not get expected HTTP status code, got", w.Code)
+		t.Fail()
+	}
+}
