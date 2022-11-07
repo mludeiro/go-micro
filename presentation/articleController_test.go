@@ -101,7 +101,7 @@ func TestGetAllFail(t *testing.T) {
 	}
 }
 
-func Delete(t *testing.T) {
+func TestDeleteSuccess(t *testing.T) {
 	w := httptest.NewRecorder()
 	c := presentation.ArticleController{Service: ServiceActicleMock{Error: errors.New("")}}
 
