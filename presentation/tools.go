@@ -3,6 +3,7 @@ package presentation
 import (
 	"errors"
 	"go-micro/entity"
+	"go-micro/repository"
 	"net/http"
 	"strconv"
 	"strings"
@@ -83,4 +84,28 @@ func GetQuery(r *http.Request) entity.Query {
 		Conditions: GetCondition(r),
 		OrderBy:    GetOrder(r),
 	}
+}
+
+func GetRepositoryQuery(r *http.Request) repository.Query {
+	return repository.Query{
+		Fetchs:     GetExpand(r),
+		Conditions: GetRepositoryCondition(r),
+		OrderBy:    GetOrder(r),
+	}
+}
+
+func GetRepositoryCondition(r *http.Request) []repository.Condition {
+	val, _ := GetArrayStringQueryParam(r, "condition")
+
+	conditions := []repository.Condition{}
+
+	for _, cond := range val {
+		elems := strings.Split(cond, " ")
+		if len(elems) != 3 {
+			return []repository.Condition{}
+		}
+		conditions = append(conditions, repository.Condition{Field: elems[0], Comparator: elems[1], Value: elems[2]})
+	}
+
+	return conditions
 }

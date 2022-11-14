@@ -1,12 +1,7 @@
 package presentation_test
 
 import (
-	"errors"
 	"go-micro/entity"
-	"go-micro/presentation"
-	"net/http"
-	"net/http/httptest"
-	"testing"
 )
 
 type ServiceActicleMock struct {
@@ -31,84 +26,85 @@ func (mock ServiceActicleMock) Delete(uint) (*entity.Article, error) {
 	return mock.Article, mock.Error
 }
 
-func TestGet(t *testing.T) {
-	w := httptest.NewRecorder()
-	c := presentation.ArticleController{Service: ServiceActicleMock{Article: &entity.Article{}}}
+// func TestGet(t *testing.T) {
+// 	w := httptest.NewRecorder()
+// 	c := presentation.ArticleController{Service: ServiceActicleMock{Article: &entity.Article{}}}
 
-	c.GetArticle(w, httptest.NewRequest("GET", "/", nil))
+// 	c.GetArticle(w, httptest.NewRequest("GET", "/", nil))
 
-	if w.Code != http.StatusOK {
-		t.Error("Did not get expected HTTP status code, got", w.Code)
-		t.Fail()
-	}
-}
+// 	if w.Code != http.StatusOK {
+// 		t.Error("Did not get expected HTTP status code, got", w.Code)
+// 		t.Fail()
+// 	}
+// }
 
-func TestGetNotFound(t *testing.T) {
-	w := httptest.NewRecorder()
-	c := presentation.ArticleController{Service: ServiceActicleMock{}}
+// func TestGetNotFound(t *testing.T) {
+// 	w := httptest.NewRecorder()
+// 	c := presentation.ArticleController{Service: ServiceActicleMock{}}
 
-	c.GetArticle(w, httptest.NewRequest("GET", "/", nil))
+// 	c.GetArticle(w, httptest.NewRequest("GET", "/", nil))
 
-	if w.Code != http.StatusNotFound {
-		t.Error("Did not get expected HTTP status code, got", w.Code)
-		t.Fail()
-	}
-}
-func TestGetFail(t *testing.T) {
-	w := httptest.NewRecorder()
-	c := presentation.ArticleController{Service: ServiceActicleMock{Error: errors.New("")}}
+// 	if w.Code != http.StatusNotFound {
+// 		t.Error("Did not get expected HTTP status code, got", w.Code)
+// 		t.Fail()
+// 	}
+// }
 
-	c.GetArticle(w, httptest.NewRequest("GET", "/", nil))
+// func TestGetFail(t *testing.T) {
+// 	w := httptest.NewRecorder()
+// 	c := presentation.ArticleController{Service: ServiceActicleMock{Error: errors.New("")}}
 
-	if w.Code != http.StatusInternalServerError {
-		t.Error("Did not get expected HTTP status code, got", w.Code)
-		t.Fail()
-	}
-}
+// 	c.GetArticle(w, httptest.NewRequest("GET", "/", nil))
 
-func TestGetAll(t *testing.T) {
-	w := httptest.NewRecorder()
-	c := presentation.ArticleController{Service: ServiceActicleMock{Article: &entity.Article{}}}
+// 	if w.Code != http.StatusInternalServerError {
+// 		t.Error("Did not get expected HTTP status code, got", w.Code)
+// 		t.Fail()
+// 	}
+// }
 
-	c.GetArticles(w, httptest.NewRequest("GET", "/", nil))
+// func TestGetAll(t *testing.T) {
+// 	w := httptest.NewRecorder()
+// 	c := presentation.ArticleController{Service: ServiceActicleMock{Article: &entity.Article{}}}
 
-	if w.Code != http.StatusOK {
-		t.Error("Did not get expected HTTP status code, got", w.Code)
-		t.Fail()
-	}
-}
+// 	c.GetArticles(w, httptest.NewRequest("GET", "/", nil))
 
-func TestGetAllNotFound(t *testing.T) {
-	w := httptest.NewRecorder()
-	c := presentation.ArticleController{Service: ServiceActicleMock{}}
+// 	if w.Code != http.StatusOK {
+// 		t.Error("Did not get expected HTTP status code, got", w.Code)
+// 		t.Fail()
+// 	}
+// }
 
-	c.GetArticles(w, httptest.NewRequest("GET", "/", nil))
+// func TestGetAllNotFound(t *testing.T) {
+// 	w := httptest.NewRecorder()
+// 	c := presentation.ArticleController{Service: ServiceActicleMock{}}
 
-	if w.Code != http.StatusOK {
-		t.Error("Did not get expected HTTP status code, got", w.Code)
-		t.Fail()
-	}
-}
-func TestGetAllFail(t *testing.T) {
-	w := httptest.NewRecorder()
-	c := presentation.ArticleController{Service: ServiceActicleMock{Error: errors.New("")}}
+// 	c.GetArticles(w, httptest.NewRequest("GET", "/", nil))
 
-	c.GetArticles(w, httptest.NewRequest("GET", "/", nil))
+// 	if w.Code != http.StatusOK {
+// 		t.Error("Did not get expected HTTP status code, got", w.Code)
+// 		t.Fail()
+// 	}
+// }
+// func TestGetAllFail(t *testing.T) {
+// 	w := httptest.NewRecorder()
+// 	c := presentation.ArticleController{Service: ServiceActicleMock{Error: errors.New("")}}
 
-	if w.Code != http.StatusInternalServerError {
-		t.Error("Did not get expected HTTP status code, got", w.Code)
-		t.Fail()
-	}
-}
+// 	c.GetArticles(w, httptest.NewRequest("GET", "/", nil))
 
-func TestDeleteSuccess(t *testing.T) {
-	w := httptest.NewRecorder()
-	c := presentation.ArticleController{Service: ServiceActicleMock{Error: errors.New("")}}
+// 	if w.Code != http.StatusInternalServerError {
+// 		t.Error("Did not get expected HTTP status code, got", w.Code)
+// 		t.Fail()
+// 	}
+// }
 
-	c.DeleteArticle(w, httptest.NewRequest("DELETE", "/1", nil))
+// func TestDeleteSuccess(t *testing.T) {
+// 	w := httptest.NewRecorder()
+// 	c := presentation.ArticleController{Service: ServiceActicleMock{Error: errors.New("")}}
 
-	if w.Code != http.StatusInternalServerError {
-		t.Error("Did not get expected HTTP status code, got", w.Code)
-		t.Fail()
-	}
-}
+// 	c.DeleteArticle(w, httptest.NewRequest("DELETE", "/1", nil))
+
+// 	if w.Code != http.StatusInternalServerError {
+// 		t.Error("Did not get expected HTTP status code, got", w.Code)
+// 		t.Fail()
+// 	}
+// }

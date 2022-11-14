@@ -2,6 +2,7 @@ package container
 
 import (
 	"go-micro/database"
+	"go-micro/entity"
 	"go-micro/presentation"
 	"go-micro/repository"
 	"go-micro/service"
@@ -22,7 +23,7 @@ func NewContainer() Container {
 			Router: presentation.WebRouter{
 				ArticleController: presentation.ArticleController{
 					Service: &service.Article{
-						IArticleRepository: &repository.Article{
+						Repo: &repository.Repository[entity.Article]{
 							DataBase: &database},
 					},
 				},

@@ -7,16 +7,27 @@ import (
 
 type IActicleService interface {
 	Get(uint, []string) (*entity.Article, error)
-	GetAll(query entity.Query) (entity.ArticleResultSet, error)
+	GetAll(query *repository.Query) (*repository.ResultSet[entity.Article], error)
 	Add(*entity.Article) (*entity.Article, error)
 	Delete(uint) (*entity.Article, error)
 }
 
 type Article struct {
-	repository.IArticleRepository
+	Repo *repository.Repository[entity.Article]
 }
 
-// if you want to, you can wrap or redefine the repository method
-func (a *Article) GetAll(query entity.Query) (entity.ArticleResultSet, error) {
-	return a.IArticleRepository.GetAll(query)
+func (a *Article) Get(id uint, fetchs []string) (*entity.Article, error) {
+	return a.Repo.Get(id, fetchs)
+}
+
+func (a *Article) GetAll(query *repository.Query) (*repository.ResultSet[entity.Article], error) {
+	return a.Repo.GetAll(query), nil
+}
+
+func (a *Article) Add(dto *entity.Article) (*entity.Article, error) {
+	return a.Repo.Add(dto)
+}
+
+func (a *Article) Delete(id uint) (*entity.Article, error) {
+	return a.Repo.Delete(id)
 }

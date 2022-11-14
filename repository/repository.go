@@ -2,7 +2,8 @@ package repository
 
 import (
 	"go-micro/database"
-	"go-micro/entity"
+
+	"gorm.io/gorm"
 )
 
 // type IArticleRepository interface {
@@ -32,24 +33,54 @@ func (this *Repository[T]) Get(id uint, fetchs []string) (*T, error) {
 	}
 }
 
-func (this *Repository[T]) GetAll(query entity.Query) (entity.ResultSet[T], error) {
-	dtos := entity.ResultSet[T]{Query: query}
-	P
-	dataQuery := this.DataBase.GetDB().Limit(int(query.PageSize)).Offset(int(query.PageNumber * query.PageSize)).Find(dest)
+func (repo *Repository[T]) getQueryDB(query *Query) *gorm.DB {
+	tx := repo.DataBase.GetDB()
 
-	if dataQuery.Error != nil {
-		return dataQuery.Error
+	for _, fetch := range query.Fetchs {
+		tx = tx.Preload(fetch)
 	}
 
-	dtos.Page = query.PageNumber
-	this.trx.Model(dest).Count(&set.Total)
+	for _, cond := range query.Conditions {
+		switch cond.Comparator {
+		case "eq":
+			tx = tx.Where(cond.Field, cond.Value)
+		case "lk":
+			tx = tx.Where(cond.Field, cond.Value)
+		}
+	}
 
-	err := this.DataBase.GetQueryDB(query).GetResult(&dtos, &dtos.Data)
+	for _, order := range query.OrderBy {
+		tx = tx.Order(order)
+	}
 
-	return articles, err
+	return tx
 }
 
-func (this *Repository[T]) Add(a *entity.Article) (*entity.Article, error) {
+func getResult[T any](tx gorm.DB, query *Query) *ResultSet[T] {
+	var rset ResultSet[T]
+	dataQuery := tx.Limit(int(query.PageSize)).Offset(int(query.PageNumber * query.PageSize)).Find(&rset.Data)
+
+	rset.Error = dataQuery.Error
+	rset.Page = query.PageNumber
+	tx.Model(rset.Data).Count(&rset.Total)
+
+	return &rset
+}
+
+func (this *Repository[T]) GetAll(query *Query) *ResultSet[T] {
+	var rset ResultSet[T]
+
+	dataQuery := this.getQueryDB(query)
+	dataQuery = dataQuery.Limit(int(query.PageSize)).Offset(int(query.PageNumber * query.PageSize)).Find(&rset.Data)
+
+	rset.Error = dataQuery.Error
+	rset.Page = query.PageNumber
+	dataQuery.Model(rset.Data).Count(&rset.Total)
+
+	return &rset
+}
+
+func (this *Repository[T]) Add(a *T) (*T, error) {
 	query := this.DataBase.GetDB().Create(a)
 	if query.Error != nil {
 		return nil, query.Error
@@ -57,14 +88,14 @@ func (this *Repository[T]) Add(a *entity.Article) (*entity.Article, error) {
 	return a, nil
 }
 
-func (this *Repository[T]) Delete(id uint) (*entity.Article, error) {
-	article := entity.Article{}
-	query := this.DataBase.GetDB().Where("deleted_at is NULL").Delete(&article, id)
+func (this *Repository[T]) Delete(id uint) (*T, error) {
+	var dto T
+	query := this.DataBase.GetDB().Where("deleted_at is NULL").Delete(&dto, id)
 	if query.Error != nil {
 		return nil, query.Error
 	} else {
 		if query.RowsAffected == 1 {
-			return &article, nil
+			return &dto, nil
 		} else {
 			return nil, nil
 		}
